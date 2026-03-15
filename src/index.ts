@@ -1,30 +1,6 @@
-import fastify from "fastify";
-import swagger from "@fastify/swagger";
-import swaggerUI from "@fastify/swagger-ui";
+import { buildServer } from "./app.js";
 
-const server = fastify({
-  logger: true,
-});
-
-await server.register(swagger, {
-  openapi: {
-    info: {
-      title: "Fastify - Mata Sales API",
-      version: "1.0.0",
-      description: "Sales data API for the 1-week backend challenge",
-    },
-  },
-});
-
-await server.register(swaggerUI, {
-  routePrefix: "/docs",
-});
-
-server.get("/", async (request, reply) => {
-  return {
-    message: "HELLO WORLD!",
-  };
-});
+const server = buildServer();
 
 server.listen({ port: 3000 }, (err, address) => {
   if (err) {
