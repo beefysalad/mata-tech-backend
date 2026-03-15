@@ -1,10 +1,19 @@
 import fastify from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { healthRoutes } from "./routes/health.routes.js";
 
 export function buildServer() {
-  const server = fastify({ logger: true });
+  const server = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
+
+  server.setValidatorCompiler(validatorCompiler);
+  server.setSerializerCompiler(serializerCompiler);
 
   server.register(swagger, {
     openapi: {
@@ -14,6 +23,7 @@ export function buildServer() {
         description: "Sales data API for the 1-week backend challenge",
       },
     },
+    transform: jsonSchemaTransform,
   });
 
   server.register(swaggerUI, { routePrefix: "/docs" });

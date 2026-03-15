@@ -36,6 +36,9 @@ server.route({
 ## Prisma
 - 
 
+## Zod
+- Using Zod schemas in Fastify routes enables runtime validation and powers Swagger docs.
+
 ## Docker
 - 
 
