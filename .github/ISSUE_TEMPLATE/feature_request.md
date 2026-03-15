@@ -1,6 +1,6 @@
 ---
 name: Feature request
-description: Suggest a feature or improvement
+about: Suggest a feature or improvement
 ---
 
 ## Summary
