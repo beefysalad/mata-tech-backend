@@ -12,10 +12,28 @@ A small Fastify + TypeScript backend built for a 1‑week learning challenge. Th
 - Node.js
 - Fastify
 - TypeScript
-- PostgreSQL (planned)
-- Prisma (planned)
+- PostgreSQL
+- Prisma
 
 ## Quick Start
+
+### Option A: Docker (Recommended)
+
+Build and run the API + Postgres with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Server starts on `http://localhost:3000` and Swagger UI at `http://localhost:3000/docs`.
+
+If your Windows shell doesn't recognize `docker compose`, try:
+
+```bash
+docker-compose up --build
+```
+
+### Option B: Local Node.js
 
 1. Install dependencies
 
@@ -35,8 +53,6 @@ npm run dev
 npm run start
 ```
 
-Server starts on `http://localhost:3000`.
-
 ## API (Current)
 
 - `GET /` — returns a hello message.
@@ -55,7 +71,7 @@ Server starts on `http://localhost:3000`.
 - `products` (id, name, price, created_at)
 - `sales` (id, customer_id, product_id, quantity, sale_date)
 
-## Docker (In Progress)
+## Docker
 
 Build and run with Docker:
 
