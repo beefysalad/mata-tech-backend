@@ -145,3 +145,6 @@ This project follows an MVC-style structure with service and repository layers:
 
 - `docs/TIMELINE.md` — progress timeline
 - `docs/LEARNING.md` — learning notes
+
+## Contributing
+See `CONTRIBUTING.md` for workflow and style.
