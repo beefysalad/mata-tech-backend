@@ -75,6 +75,17 @@ Create a `.env` file (see `.env.example`):
 - `PORT`
 - `DATABASE_URL`
 
+## Prisma
+Prisma has been initialized. The schema lives in `prisma/schema.prisma`.
+
+Common commands:
+
+```bash
+npm run prisma
+npm run migrate
+npm run generate
+```
+
 ## Project Structure (Current)
 - `src/index.ts` — Fastify server entry.
 
