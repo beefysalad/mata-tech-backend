@@ -14,6 +14,7 @@ A small Fastify + TypeScript backend built for a 1‑week learning challenge. Th
 - TypeScript
 - PostgreSQL
 - Prisma
+- Zod (schema validation)
 
 ## Quick Start
 
@@ -56,6 +57,7 @@ npm run start
 ## API (Current)
 
 - `GET /api/health` — returns a health response.
+- `GET /api/test/:name` — returns a hello message.
 - Swagger UI available at `GET /docs`.
 
 ## Planned API (Target)

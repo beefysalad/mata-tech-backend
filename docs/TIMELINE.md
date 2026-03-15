@@ -13,6 +13,7 @@ Assumption: “yesterday” refers to 2026-03-14. If that date is off, tell me a
 - Initialized Fastify + TypeScript project.
 - Added a basic `GET /` route to validate server setup.
 - Learned about plugins, schemas and how it works.
+- Implement zod validation with schema options for route
 - Started dockerization work for a much easier setup and deployment.
 
 ## Planned (Next 3–4 Days)
