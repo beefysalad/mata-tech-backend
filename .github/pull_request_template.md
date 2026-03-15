@@ -1,34 +1,19 @@
 ## Summary
 - 
 
-## Type of Change
+## Type of Change (pick one)
 - [ ] Feature
 - [ ] Fix
 - [ ] Chore/Refactor
 - [ ] Docs
 - [ ] Breaking change
 
-## Changes
-- 
-
 ## How to Test
 - 
 
-## API Changes
-- 
-
-## DB/Migrations
-- 
-
-## Demo Notes
-- 
-
-## Checklist
-- [ ] Endpoint docs updated (if applicable)
-- [ ] Prisma schema/migration updated (if applicable)
-- [ ] Docker compose still runs (`docker compose up --build`)
-- [ ] Demo flow updated (if applicable)
-- [ ] No breaking changes (or noted below)
-
-## Notes
-- 
+## Checklist (optional)
+- [ ] Endpoint docs updated
+- [ ] Prisma schema/migration updated
+- [ ] Docker compose still runs
+- [ ] Demo flow updated
+- [ ] Breaking changes noted
