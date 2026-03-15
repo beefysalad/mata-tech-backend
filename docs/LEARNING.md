@@ -44,3 +44,12 @@ server.route({
 
 ## API Design
 - 
+
+## Resources
+```text
+https://www.youtube.com/watch?v=btGtOue1oDA - Fastify Course 🚀 The Performant Node.js Web Framework
+https://www.youtube.com/watch?v=ZHLB4StAqPM - Learn Just Enough Fastify to be Productive
+https://fastify.dev/docs/latest/
+https://www.prisma.io/fastify
+https://fastify.dev/docs/latest/Guides/Database/
+```
