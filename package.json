@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc && node src/index.js",
+    "start": "npx tsc && node dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
     "prisma": "prisma",
     "migrate": "prisma migrate dev",
@@ -16,6 +16,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@prisma/client": "^7.5.0",
     "fastify": "^5.8.2",
     "prisma": "^7.5.0"
