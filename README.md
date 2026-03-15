@@ -55,7 +55,7 @@ npm run start
 
 ## API (Current)
 
-- `GET /` — returns a hello message.
+- `GET /api/health` — returns a health response.
 - Swagger UI available at `GET /docs`.
 
 ## Planned API (Target)
@@ -121,13 +121,25 @@ npm run generate
 
 ## Project Structure (Current)
 
-- `src/index.ts` — Fastify server entry.
+- `src/index.ts` — server start
+- `src/app.ts` — Fastify app builder
+- `src/routes/` — route definitions
+- `src/controllers/` — request handlers
+- `src/services/` — business logic layer
+- `src/repositories/` — data access layer
+- `src/schemas/` — validation schemas
+- `src/plugins/` — Fastify plugins (e.g., Prisma, Swagger)
+
+## Architecture
+
+This project follows an MVC-style structure with service and repository layers:
+
+- Controllers handle HTTP request/response concerns.
+- Services contain businesss logic and orchestration.
+- Repositories handle database access (via Prisma).
+- Routes wire endpoints to controllers.
 
 ## Docs
 
 - `docs/TIMELINE.md` — progress timeline
 - `docs/LEARNING.md` — learning notes
-
-## Notes
-
-This project is intentionally simple but structured to grow into a small “enterprise‑style” service as the week progresses.
