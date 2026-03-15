@@ -1,0 +1,25 @@
+name: Delete merged branch
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  delete-merged-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete head branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const ref = `heads/${context.payload.pull_request.head.ref}`;
+            if (ref.startsWith('heads/main') || ref.startsWith('heads/prod')) {
+              core.info(`Skipping protected branch: ${ref}`);
+              return;
+            }
+            await github.rest.git.deleteRef({ owner, repo, ref });
