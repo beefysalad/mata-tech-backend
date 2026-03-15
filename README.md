@@ -36,6 +36,7 @@ Server starts on `http://localhost:3000`.
 
 ## API (Current)
 - `GET /` — returns a hello message.
+- Swagger UI available at `GET /docs`.
 
 ## Planned API (Target)
 - `GET /sales?month=YYYY-MM` — list sales with customer and product details for a given month.
@@ -88,6 +89,10 @@ npm run generate
 
 ## Project Structure (Current)
 - `src/index.ts` — Fastify server entry.
+
+## Docs
+- `docs/TIMELINE.md` — progress timeline
+- `docs/LEARNING.md` — learning notes
 
 ## Notes
 This project is intentionally simple but structured to grow into a small “enterprise‑style” service as the week progresses.
