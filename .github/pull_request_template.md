@@ -1,6 +1,13 @@
 ## Summary
 - 
 
+## Type of Change
+- [ ] Feature
+- [ ] Fix
+- [ ] Chore/Refactor
+- [ ] Docs
+- [ ] Breaking change
+
 ## Changes
 - 
 
