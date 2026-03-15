@@ -1,0 +1,30 @@
+name: Open PR (main -> prod)
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "PR title"
+        required: false
+        default: "chore: sync main to prod"
+      body:
+        description: "PR body"
+        required: false
+        default: "Automated PR from main to prod."
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create PR from main to prod
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: prod
+          branch: main
+          title: ${{ inputs.title }}
+          body: ${{ inputs.body }}
+          delete-branch: false
