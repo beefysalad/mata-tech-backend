@@ -6,6 +6,7 @@ import {
 } from "fastify-type-provider-zod";
 import { healthRoutes } from "./routes/health.routes.js";
 import { customerRoutes } from "./routes/customer.routes.js";
+import { productRoutes } from "./routes/product.routes.js";
 import { swaggerPlugin } from "./plugins/swagger.js";
 
 export function buildServer() {
@@ -16,6 +17,7 @@ export function buildServer() {
   server.register(swaggerPlugin);
 
   server.register(customerRoutes, { prefix: "/api/customers" });
+  server.register(productRoutes, { prefix: "/api/products" });
 
   server.register(healthRoutes, { prefix: "/api" });
 

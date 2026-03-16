@@ -1,19 +1,23 @@
 import { z } from "zod";
 
-const customerIdSchema = z.string().uuid();
+const customerIdSchema = z.string().min(1);
+const dateTimeSchema = z.preprocess((value) => {
+  if (value instanceof Date) return value.toISOString();
+  return value;
+}, z.string().datetime());
 
 export const customerSchema = z.object({
   id: customerIdSchema,
   name: z.string(),
   email: z.string().email(),
   phone: z.string().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: dateTimeSchema,
+  updatedAt: dateTimeSchema,
 });
 
 export const createCustomerBodySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Email is required"),
+  name: z.string().min(1),
+  email: z.string().email(),
 });
 
 export const updateCustomerBodySchema = z.object({
