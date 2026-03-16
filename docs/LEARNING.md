@@ -38,6 +38,7 @@ server.route({
 - Prisma singleton in dev avoids multiple client instances on reload.
 - With the generated client in this repo, Prisma requires a driver adapter (`@prisma/adapter-pg`) and `DATABASE_URL`.
 - Seed scripts are easiest via `prisma/seed.ts` with Faker for realistic data.
+- Product seeding requires required fields (`sku`, `description`, `price`) to match schema constraints.
 
 ## Zod
 - Using Zod schemas in Fastify routes enables runtime validation and powers Swagger docs.
@@ -57,6 +58,7 @@ server.route({
 ## Testing
 - Fastify route tests can use `app.inject` without running a real server.
 - Vitest is a lightweight option for API tests in Node.
+- Added API tests for products (CRUD) alongside customers.
 
 ## Resources
 ```text
