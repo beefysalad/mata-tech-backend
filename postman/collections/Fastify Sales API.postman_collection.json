@@ -5,32 +5,38 @@
     "description": "Sales data API for the 1-week backend challenge. This collection contains all endpoints for the Fastify Sales API including health checks and customer management.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:3000",
-      "type": "string"
-    },
-    {
-      "key": "customerId",
-      "value": "",
-      "type": "string"
-    }
-  ],
   "item": [
     {
       "name": "Health",
-      "description": "Health check and test endpoints for monitoring API status.",
       "item": [
         {
           "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "5ba8f0c0-d971-46b3-99fa-6fc5cd2ce219",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
             },
             "description": "Returns the health status of the API. Response: `{ ok: boolean }`"
           },
@@ -38,13 +44,33 @@
         },
         {
           "name": "Test Endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "aad87310-7f29-4117-a1ef-70d714b7fce9",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/test/:name",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "test", ":name"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "test",
+                ":name"
+              ],
               "variable": [
                 {
                   "key": "name",
@@ -57,14 +83,16 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "a40f422a-2abf-4513-aa5f-093f3f9fb661",
+      "description": "Health check and test endpoints for monitoring API status."
     },
     {
       "name": "Customers",
-      "description": "Customer management endpoints for CRUD operations.",
       "item": [
         {
           "name": "Create Customer",
+          "id": "42ea40ea-a29a-457b-8817-ff432eaa0238",
           "request": {
             "method": "POST",
             "header": [
@@ -84,8 +112,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/customers",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "customers"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers"
+              ]
             },
             "description": "Creates a new customer. Required fields: `name` (string, min 1 char), `email` (valid email). Returns the created customer object."
           },
@@ -93,13 +126,19 @@
         },
         {
           "name": "Get All Customers",
+          "id": "c1250be0-bd90-4ae1-b44e-e302db14cfc5",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/customers",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "customers"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers"
+              ]
             },
             "description": "Retrieves all customers. Response: `{ customers: Customer[] }`"
           },
@@ -107,6 +146,7 @@
         },
         {
           "name": "Update Customer",
+          "id": "74bf668b-5500-4ca1-9f49-8c0608bd7199",
           "request": {
             "method": "PUT",
             "header": [
@@ -126,8 +166,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "customers", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -142,13 +188,20 @@
         },
         {
           "name": "Delete Customer",
+          "id": "e4ee9bc5-c628-4204-a523-5a8c7b145e07",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/customers/:id",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "customers", ":id"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                ":id"
+              ],
               "variable": [
                 {
                   "key": "id",
@@ -161,7 +214,292 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "4481fe47-d220-4248-9398-0541b3f836a0",
+      "description": "Customer management endpoints for CRUD operations."
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has products array', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('products');",
+                  "  pm.expect(jsonData.products).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "52e7394b-6339-4835-a3a5-50da9b1d2968",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Retrieves all products. Response: `{ products: Product[] }`."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has product object', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('product');",
+                  "  pm.expect(jsonData.product).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "fc16d59d-3134-4059-949c-569377188492",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{productId}}",
+                  "description": "Product UUID"
+                }
+              ]
+            },
+            "description": "Retrieves a product by ID. Response: `{ product: Product }`."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a63f06d2-cc50-4e1f-aada-84c3a4ff76e6",
+                "exec": [
+                  "pm.test('Status code is 201 or 200', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response has product object', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('product');",
+                  "  pm.expect(jsonData.product).to.be.an('object');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "d41b220c-2b30-499c-81fb-8f923093f3a8",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "43caca65-8ada-4501-8c6c-497ad1c15669",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Widget A\",\n  \"description\": \"A high-quality widget for your needs.\",\n  \"sku\": \"WIDGET-A\",\n  \"price\": 19.99,\n  \"inStock\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Creates a new product. Body fields: `name` (string), `sku` (string), `price` (number), `inStock` (boolean). Returns the created product object."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has product object', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('product');",
+                  "  pm.expect(jsonData.product).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "91b4e731-98c2-46c0-96d7-a5cf4e1799a3",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Widget A (Updated)\",\n  \"sku\": \"WIDGET-A\",\n  \"price\": 24.99,\n  \"inStock\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{productId}}",
+                  "description": "Product UUID"
+                }
+              ]
+            },
+            "description": "Updates an existing product by ID. Body fields: `name` (string), `sku` (string), `price` (number), `inStock` (boolean). Returns the updated product object."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 204 or 200', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "80998c21-bdc5-49e0-9b03-20324555e8b4",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{productId}}",
+                  "description": "Product UUID"
+                }
+              ]
+            },
+            "description": "Deletes a product by ID. Returns 204 No Content or 200 OK."
+          },
+          "response": []
+        }
+      ],
+      "id": "a92607da-724a-4aad-812c-e970f840431c",
+      "description": "Product management endpoints for CRUD operations."
+    }
+  ],
+  "variable": [
+    {
+      "id": "ca6c6027-1f6e-4e5d-8742-a5aef03d2c13",
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "id": "1785ab30-b064-43d4-8046-b7e6d0aec584",
+      "key": "customerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "f2ecde0a-aec4-4db0-92fb-17a9b8acc76a",
+      "key": "productId",
+      "value": "",
+      "type": "string"
     }
   ]
 }

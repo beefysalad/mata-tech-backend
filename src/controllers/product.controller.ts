@@ -1,0 +1,59 @@
+import type { FastifyReply, FastifyRequest } from "fastify";
+import type {
+  CreateProductType,
+  ProductByIdParams,
+  UpdateProductBody,
+} from "../schemas/product.schema.js";
+import {
+  createProductService,
+  deleteProductByIdService,
+  getAllProductService,
+  updateProductByIdService,
+} from "../services/product.services.js";
+
+// CREATE
+export async function createProductController(
+  _request: FastifyRequest<{ Body: CreateProductType }>,
+  _reply: FastifyReply,
+) {
+  const { name, description, sku, price } = _request.body;
+  const product = await createProductService({
+    name,
+    description,
+    sku,
+    price,
+  });
+  return _reply.code(201).send({ product });
+}
+
+// READ
+export async function getAllProductController(
+  _request: FastifyRequest,
+  _reply: FastifyReply,
+) {
+  const products = await getAllProductService();
+  return _reply.code(200).send({ products });
+}
+
+// UPDATE
+export async function updateProductByIdController(
+  _request: FastifyRequest<{
+    Params: ProductByIdParams;
+    Body: UpdateProductBody;
+  }>,
+  _reply: FastifyReply,
+) {
+  const { id } = _request.params;
+  const product = await updateProductByIdService(id, _request.body);
+  return _reply.code(200).send({ product });
+}
+
+// DELETE
+export async function deleteProductByIdController(
+  _request: FastifyRequest<{ Params: ProductByIdParams }>,
+  _reply: FastifyReply,
+) {
+  const { id } = _request.params;
+  const product = await deleteProductByIdService(id);
+  return _reply.code(200).send({ product });
+}

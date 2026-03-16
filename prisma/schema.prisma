@@ -13,10 +13,20 @@ datasource db {
 }
 
 model Customer {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
   phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  sku         String   @unique
+  price       Decimal
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
