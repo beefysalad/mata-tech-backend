@@ -101,6 +101,21 @@ Common commands:
 npm run prisma
 npm run migrate
 npm run generate
+npm run seed
+```
+
+Seeding customers (Faker):
+
+```bash
+SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
+```
+
+## Testing
+
+API tests use Vitest and Fastify's `inject`.
+
+```bash
+npm test
 ```
 
 ## Postman

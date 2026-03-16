@@ -37,6 +37,7 @@ server.route({
 - Prisma Client types are compile-time only; they can't be used as Fastify `schema.response` directly.
 - Prisma singleton in dev avoids multiple client instances on reload.
 - With the generated client in this repo, Prisma requires a driver adapter (`@prisma/adapter-pg`) and `DATABASE_URL`.
+- Seed scripts are easiest via `prisma/seed.ts` with Faker for realistic data.
 
 ## Zod
 - Using Zod schemas in Fastify routes enables runtime validation and powers Swagger docs.
@@ -52,6 +53,10 @@ server.route({
 
 ## Postman
 - Postman can sync collections/environments directly to the repo; store them under `postman/`.
+
+## Testing
+- Fastify route tests can use `app.inject` without running a real server.
+- Vitest is a lightweight option for API tests in Node.
 
 ## Resources
 ```text
