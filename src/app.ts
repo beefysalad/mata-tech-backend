@@ -8,6 +8,7 @@ import {
 } from "fastify-type-provider-zod";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { healthRoutes } from "./routes/health.routes.js";
+import { customerRoutes } from "./routes/customer.routes.js";
 
 export function buildServer() {
   const server = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
@@ -26,7 +27,9 @@ export function buildServer() {
     transform: jsonSchemaTransform,
   });
 
-  server.register(swaggerUI, { routePrefix: "/docs" });
+  server.register(swaggerUI, { routePrefix: "/api/docs" });
+
+  server.register(customerRoutes, { prefix: "/api/customers" });
 
   server.register(healthRoutes, { prefix: "/api" });
 

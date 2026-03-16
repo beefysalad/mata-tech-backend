@@ -4,8 +4,8 @@ A small Fastify + TypeScript backend built for a 1‑week learning challenge. Th
 
 ## Status
 
-- Current: Basic Fastify server running with a health route.
-- In progress: Dockerization and API/data model implementation.
+- Current: Fastify server running with schema-based routes and Swagger.
+- In progress: Data model and core API endpoints.
 
 ## Tech Stack
 
@@ -18,41 +18,28 @@ A small Fastify + TypeScript backend built for a 1‑week learning challenge. Th
 
 ## Quick Start
 
-### Option A: Docker (Recommended)
+### Option A: Docker (Database Only) + Local Server (Recommended)
 
-Build and run the API + Postgres with Docker Compose:
+Start Postgres in Docker:
 
 ```bash
-docker compose up --build
+docker compose up -d
 ```
-
-Server starts on `http://localhost:3000` and Swagger UI at `http://localhost:3000/docs`.
 
 If your Windows shell doesn't recognize `docker compose`, try:
 
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
-### Option B: Local Node.js
-
-1. Install dependencies
+Install deps and run the server locally:
 
 ```bash
 npm install
-```
-
-2. Run in dev mode (watch + TypeScript)
-
-```bash
 npm run dev
 ```
 
-3. Build and run
-
-```bash
-npm run start
-```
+Server starts on `http://localhost:3000` and Swagger UI at `http://localhost:3000/api/docs`.
 
 ## API (Current)
 
@@ -67,25 +54,20 @@ npm run start
 - `GET /products` — list products.
 - `POST /sales` — create a sale.
 
-## Data Model (Planned)
+## Data Model
 
-- `customers` (id, name, email, created_at)
-- `products` (id, name, price, created_at)
+- `customers` (id, name, email, created_at, updated_at) — implemented in Prisma
+- `products` (id, name, price, created_at, updated_at)
 - `sales` (id, customer_id, product_id, quantity, sale_date)
 
 ## Docker
 
-Build and run with Docker:
+Only PostgreSQL is containerized in `docker-compose.yml`. The Fastify server runs locally with `npm run dev`.
+
+Start the database:
 
 ```bash
-docker build -t fastify-mata .
-docker run --rm -p 3000:3000 fastify-mata
-```
-
-Or with Docker Compose (Docker Desktop on macOS/Windows):
-
-```bash
-docker compose up --build
+docker compose up -d
 ```
 
 Notes:
@@ -93,12 +75,12 @@ Notes:
 - Works the same on macOS and Windows with Docker Desktop.
 - If Windows shell doesn't recognize `docker compose`, try `docker-compose`.
 
-PostgreSQL is included in `docker-compose.yml` with a default database:
+PostgreSQL defaults:
 
 - DB name: `sales_db`
 - User: `postgres`
 - Password: `postgres`
-- Host: `db`
+- Host: `localhost`
 - Port: `5433` (host) -> `5432` (container)
 
 ## Environment Variables
@@ -120,6 +102,13 @@ npm run prisma
 npm run migrate
 npm run generate
 ```
+
+## Postman
+
+Postman collections and environments are stored in `postman/` and synced via Postman’s Git integration.
+
+- Collection: `postman/collections/Fastify Sales API.postman_collection.json`
+- Environment: `postman/environments/New_Environment.postman_environment.json`
 
 ## Project Structure (Current)
 
@@ -147,4 +136,5 @@ This project follows an MVC-style structure with service and repository layers:
 - `docs/LEARNING.md` — learning notes
 
 ## Contributing
+
 See `CONTRIBUTING.md` for workflow and style.
