@@ -16,6 +16,17 @@ Assumption: “yesterday” refers to 2026-03-14. If that date is off, tell me a
 - Implement zod validation with schema options for route
 - Started dockerization work for a much easier setup and deployment.
 
+## 2026-03-16 (Day 3)
+
+- Added initial Prisma model for customers.
+- Updated README status and data model notes.
+- Switched Docker usage to database-only; server runs locally with `npm run dev`.
+- Added Prisma singleton + adapter setup and ensured `.env` loads before Prisma.
+- Refactored customer Zod schemas for readability and reusability.
+- Added Swagger tags to group customer routes in swagger.
+- Fixed response schemas and explicit 201 status for create.
+- Added Postman collection + environment synced via Postman Git integration.
+
 ## Planned (Next 3–4 Days)
 
 - Define DB schema (customers, products, sales) and migrations.
