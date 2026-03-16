@@ -1,7 +1,5 @@
 # 1‑Week Progress Timeline
 
-Assumption: “yesterday” refers to 2026-03-14. If that date is off, tell me and I’ll update.
-
 ## 2026-03-14 (Day 1)
 
 - Watched Fastify crash courses and official documentation.
