@@ -31,6 +31,8 @@ Assumption: “yesterday” refers to 2026-03-14. If that date is off, tell me a
 
 - Added Vitest API tests (health + customer CRUD).
 - Added Faker-based customer seeding with batch inserts.
+- Added Product model and CRUD endpoints.
+- Added product seeding and product API tests.
 
 ## Planned (Next 3–4 Days)
 
