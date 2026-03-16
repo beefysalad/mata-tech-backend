@@ -27,6 +27,11 @@ Assumption: “yesterday” refers to 2026-03-14. If that date is off, tell me a
 - Fixed response schemas and explicit 201 status for create.
 - Added Postman collection + environment synced via Postman Git integration.
 
+## 2026-03-17 (Day 4)
+
+- Added Vitest API tests (health + customer CRUD).
+- Added Faker-based customer seeding with batch inserts.
+
 ## Planned (Next 3–4 Days)
 
 - Define DB schema (customers, products, sales) and migrations.
