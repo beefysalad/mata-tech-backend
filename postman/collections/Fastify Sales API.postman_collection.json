@@ -480,6 +480,63 @@
       ],
       "id": "a92607da-724a-4aad-812c-e970f840431c",
       "description": "Product management endpoints for CRUD operations."
+    },
+    {
+      "name": "Sales",
+      "item": [
+        {
+          "name": "Create Sale",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201 or 200', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response has id', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('id');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "id": "d0905bd0-24d6-4e6d-8caa-9c669ef04aa2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"\",\n  \"items\": [\n    {\n      \"productId\": \"\",\n      \"quantity\": 1\n    }\n  ],\n  \"notes\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/sales",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "b54a022c-1dff-4f23-af06-4d02bb74c06b",
+      "description": "Sales management endpoints for creating and managing sales."
     }
   ],
   "variable": [
