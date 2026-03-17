@@ -9,6 +9,7 @@ import { customerRoutes } from "./routes/customer.routes.js";
 import { productRoutes } from "./routes/product.routes.js";
 import { salesRoutes } from "./routes/sales.routes.js";
 import { swaggerPlugin } from "./plugins/swagger.js";
+import { errorHandlerPlugin } from "./plugins/error-handler.js";
 
 export function buildServer() {
   const server = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
@@ -16,6 +17,7 @@ export function buildServer() {
   server.setSerializerCompiler(serializerCompiler);
 
   server.register(swaggerPlugin);
+  server.register(errorHandlerPlugin);
 
   server.register(customerRoutes, { prefix: "/api/customers" });
   server.register(productRoutes, { prefix: "/api/products" });
