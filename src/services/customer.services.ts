@@ -1,4 +1,5 @@
-import { Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../errors/app-error.js";
+import { mapPrismaError } from "../errors/prisma-error.js";
 import {
   createCustomerRepository,
   deleteCustomerByIdRepository,
@@ -14,12 +15,10 @@ export const createCustomerService = async (data: CreateCustomerType) => {
   try {
     return await createCustomerRepository(data);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
-      throw new Error("Customer already exists");
-    }
+    const mapped = mapPrismaError(error, {
+      P2002: { statusCode: 409, message: "Customer already exists" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
@@ -54,12 +53,10 @@ export const updateCustomerByIdService = async (
 
     return await updateCustomerByIdRepository(id, updateData);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
-    ) {
-      throw new Error("Customer not found");
-    }
+    const mapped = mapPrismaError(error, {
+      P2025: { statusCode: 404, message: "Customer not found" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
@@ -68,12 +65,10 @@ export const deleteCustomerByIdService = async (id: string) => {
   try {
     return await deleteCustomerByIdRepository(id);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
-    ) {
-      throw new Error("Customer not found");
-    }
+    const mapped = mapPrismaError(error, {
+      P2025: { statusCode: 404, message: "Customer not found" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
