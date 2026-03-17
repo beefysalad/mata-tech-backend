@@ -11,3 +11,36 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sales     Sale[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  sku         String   @unique
+  price       Decimal
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sales       Sale[]
+}
+
+model Sale {
+  id         String   @id @default(cuid())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  quantity   Int
+  saleDate   DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
