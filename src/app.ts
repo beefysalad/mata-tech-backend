@@ -7,6 +7,7 @@ import {
 import { healthRoutes } from "./routes/health.routes.js";
 import { customerRoutes } from "./routes/customer.routes.js";
 import { productRoutes } from "./routes/product.routes.js";
+import { salesRoutes } from "./routes/sales.routes.js";
 import { swaggerPlugin } from "./plugins/swagger.js";
 
 export function buildServer() {
@@ -18,6 +19,7 @@ export function buildServer() {
 
   server.register(customerRoutes, { prefix: "/api/customers" });
   server.register(productRoutes, { prefix: "/api/products" });
+  server.register(salesRoutes, { prefix: "/api/sales" });
 
   server.register(healthRoutes, { prefix: "/api" });
 

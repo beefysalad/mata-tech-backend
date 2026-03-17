@@ -52,8 +52,39 @@ async function main() {
     totalCustomers += result.count;
   }
 
+  const allCustomers = await prisma.customer.findMany({
+    select: { id: true },
+  });
+  const allProducts = await prisma.product.findMany({
+    select: { id: true },
+  });
+
+  const saleCount = Math.max(5, Math.floor(SEED_COUNT / 2));
+  const sales = Array.from({ length: saleCount }).map(() => {
+    const customer =
+      allCustomers[Math.floor(Math.random() * allCustomers.length)];
+    const product =
+      allProducts[Math.floor(Math.random() * allProducts.length)];
+    return {
+      customerId: customer.id,
+      productId: product.id,
+      quantity: faker.number.int({ min: 1, max: 5 }),
+      saleDate: faker.date.recent({ days: 120 }),
+    };
+  });
+
+  let totalSales = 0;
+  for (let i = 0; i < sales.length; i += BATCH_SIZE) {
+    const batch = sales.slice(i, i + BATCH_SIZE);
+    const result = await prisma.sale.createMany({
+      data: batch,
+    });
+    totalSales += result.count;
+  }
+
   console.log(`Seeded ${totalCreated} products`);
   console.log(`Seeded ${totalCustomers} customers`);
+  console.log(`Seeded ${totalSales} sales`);
 }
 
 main()
