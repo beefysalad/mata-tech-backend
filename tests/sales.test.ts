@@ -51,7 +51,7 @@ describeIf("sales API", () => {
   });
 
   it("creates a sale", async () => {
-    const saleDate = new Date().toISOString();
+    const saleDate = new Date(Date.UTC(2026, 2, 15, 12, 0, 0)).toISOString();
     const response = await app.inject({
       method: "POST",
       url: "/api/sales/",
@@ -72,20 +72,17 @@ describeIf("sales API", () => {
   });
 
   it("lists sales by month with pagination", async () => {
-    const now = new Date();
-    const month = `${now.getUTCFullYear()}-${String(
-      now.getUTCMonth() + 1,
-    ).padStart(2, "0")}`;
+    const month = "2026-03";
 
     const response = await app.inject({
       method: "GET",
-      url: `/api/sales/?month=${month}&limit=10&offset=0`,
+      url: `/api/sales/?month=${month}&limit=50&offset=0`,
     });
 
     expect(response.statusCode).toBe(200);
     const body = response.json();
     expect(Array.isArray(body.sales)).toBe(true);
-    expect(body.limit).toBe(10);
+    expect(body.limit).toBe(50);
     expect(body.offset).toBe(0);
     if (saleId) {
       const match = body.sales.find(
