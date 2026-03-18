@@ -11,9 +11,17 @@ This project implements the **1 Week JavaScript Backend Challenge** with a focus
 - Practical REST API design and documentation
 - Modern TypeScript usage and tooling
 
+## Challenge Requirements (Condensed)
+
+- Learn Fastify or Koa and build a REST API for sales data.
+- Data model must include **customers**, **products**, and **sales**.
+- Core use case: query sales by month to see which customer bought which products.
+- Bonus (optional): validation, authentication, error handling, and other enterprise features.
+
 ## Status
 
 - Current: Customer + Product CRUD, Sales CRUD, monthly sales query, Swagger docs, seeding, and API tests
+- Demo: A simple Next.js frontend was created for walkthroughs. If you want to clone it, use this repo: `[GITHUB_LINK_HERE]` (replace later).
 
 ## Tech Stack
 
@@ -110,6 +118,10 @@ Optional:
 
 ## API Endpoints
 
+### Required (Challenge)
+
+These satisfy the core requirements of the 1‑week challenge.
+
 ### Customers
 
 - `POST /api/customers`
@@ -128,6 +140,12 @@ Optional:
 
 - `POST /api/sales`
 - `GET /api/sales?month=YYYY-MM`
+
+### Bonus / Extra (Added)
+
+These are not required by the challenge, but added to make the API more usable.
+
+- `GET /api/products/summary` (aggregates total stock, low stock, and average price)
 
 Swagger UI is the source of truth for request/response contracts:
 `http://localhost:3000/api/docs`
