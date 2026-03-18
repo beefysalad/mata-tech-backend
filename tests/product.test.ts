@@ -46,6 +46,36 @@ describeIf("products API", () => {
     createdProductId = body.product.id;
   });
 
+  it("rejects invalid product payload", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/products/",
+      payload: {
+        name: "",
+        description: "",
+        sku: "",
+        price: -10,
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("rejects duplicate product sku", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/products/",
+      payload: {
+        name: "Dup Product",
+        description: "Duplicate sku",
+        sku: testSku,
+        price: 10,
+      },
+    });
+
+    expect(response.statusCode).toBe(409);
+  });
+
   it("lists products", async () => {
     const response = await app.inject({
       method: "GET",
@@ -80,6 +110,18 @@ describeIf("products API", () => {
     expect(body.product.name).toBe("Updated Product");
   });
 
+  it("returns 404 when updating missing product", async () => {
+    const response = await app.inject({
+      method: "PUT",
+      url: "/api/products/nonexistent",
+      payload: {
+        name: "Should Fail",
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+  });
+
   it("deletes a product", async () => {
     if (!createdProductId) {
       throw new Error("Missing product id from create test");
@@ -96,5 +138,14 @@ describeIf("products API", () => {
     expect(body.product.id).toBe(createdProductId);
 
     createdProductId = undefined;
+  });
+
+  it("returns 404 when deleting missing product", async () => {
+    const response = await app.inject({
+      method: "DELETE",
+      url: "/api/products/nonexistent",
+    });
+
+    expect(response.statusCode).toBe(404);
   });
 });
