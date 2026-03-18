@@ -72,3 +72,34 @@ export const getSalesByMonthRepository = async (
     },
   });
 };
+
+export const getSalesByMonthSummaryRepository = async (
+  from: Date,
+  to: Date,
+) => {
+  return await prisma.sale.findMany({
+    where: {
+      saleDate: {
+        gte: from,
+        lt: to,
+      },
+    },
+    select: {
+      id: true,
+      quantity: true,
+      product: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+};

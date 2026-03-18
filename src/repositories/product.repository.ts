@@ -5,6 +5,16 @@ import type {
   UpdateProductBody,
 } from "../schemas/product.schema.js";
 
+export const getProductByIdRepository = async (
+  id: string,
+): Promise<Product | null> => {
+  return await prisma.product.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
 export const createProductRepository = async (
   data: CreateProductType,
 ): Promise<Product> => {

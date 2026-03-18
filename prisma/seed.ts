@@ -60,19 +60,62 @@ async function main() {
     select: { id: true },
   });
 
-  const saleCount = Math.max(5, Math.floor(SEED_COUNT / 2));
-  const sales = Array.from({ length: saleCount }).map(() => {
-    const customer =
-      allCustomers[Math.floor(Math.random() * allCustomers.length)];
-    const product =
-      allProducts[Math.floor(Math.random() * allProducts.length)];
-    return {
-      customerId: customer.id,
-      productId: product.id,
-      quantity: faker.number.int({ min: 1, max: 5 }),
-      saleDate: faker.date.recent({ days: 120 }),
-    };
-  });
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const currentMonthIndex = now.getUTCMonth();
+  const previousMonthIndex =
+    currentMonthIndex === 0 ? 11 : currentMonthIndex - 1;
+  const previousMonthYear =
+    currentMonthIndex === 0 ? currentYear - 1 : currentYear;
+
+  const currentMonthStart = new Date(
+    Date.UTC(currentYear, currentMonthIndex, 1, 0, 0, 0),
+  );
+  const currentMonthEnd = new Date(
+    Date.UTC(currentYear, currentMonthIndex + 1, 1, 0, 0, 0),
+  );
+  const previousMonthStart = new Date(
+    Date.UTC(previousMonthYear, previousMonthIndex, 1, 0, 0, 0),
+  );
+  const previousMonthEnd = new Date(
+    Date.UTC(previousMonthYear, previousMonthIndex + 1, 1, 0, 0, 0),
+  );
+
+  const currentMonthSales = 30;
+  const previousMonthSales = 30;
+
+  const sales = [
+    ...Array.from({ length: currentMonthSales }).map(() => {
+      const customer =
+        allCustomers[Math.floor(Math.random() * allCustomers.length)];
+      const product =
+        allProducts[Math.floor(Math.random() * allProducts.length)];
+      return {
+        customerId: customer.id,
+        productId: product.id,
+        quantity: faker.number.int({ min: 1, max: 6 }),
+        saleDate: faker.date.between({
+          from: currentMonthStart,
+          to: currentMonthEnd,
+        }),
+      };
+    }),
+    ...Array.from({ length: previousMonthSales }).map(() => {
+      const customer =
+        allCustomers[Math.floor(Math.random() * allCustomers.length)];
+      const product =
+        allProducts[Math.floor(Math.random() * allProducts.length)];
+      return {
+        customerId: customer.id,
+        productId: product.id,
+        quantity: faker.number.int({ min: 1, max: 5 }),
+        saleDate: faker.date.between({
+          from: previousMonthStart,
+          to: previousMonthEnd,
+        }),
+      };
+    }),
+  ];
 
   let totalSales = 0;
   for (let i = 0; i < sales.length; i += BATCH_SIZE) {

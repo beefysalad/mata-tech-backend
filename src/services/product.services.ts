@@ -1,8 +1,10 @@
+import { AppError } from "../errors/app-error.js";
 import { mapPrismaError } from "../errors/prisma-error.js";
 import {
   createProductRepository,
   deleteProductByIdRepository,
   getAllProductRepository,
+  getProductByIdRepository,
   updateProductByIdRepository,
 } from "../repositories/product.repository.js";
 import type {
@@ -10,6 +12,18 @@ import type {
   GetProductsQuery,
   UpdateProductBody,
 } from "../schemas/product.schema.js";
+
+export const getProductByIdService = async (id: string) => {
+  try {
+    const product = await getProductByIdRepository(id);
+    if (!product) {
+      throw new AppError("Product not found", 404);
+    }
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const createProductService = async (data: CreateProductType) => {
   try {
