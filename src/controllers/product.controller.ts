@@ -17,12 +17,13 @@ export async function createProductController(
   _request: FastifyRequest<{ Body: CreateProductType }>,
   _reply: FastifyReply,
 ) {
-  const { name, description, sku, price } = _request.body;
+  const { name, description, sku, price, stock } = _request.body;
   const product = await createProductService({
     name,
     description,
     sku,
     price,
+    ...(stock !== undefined && { stock }),
   });
   return _reply.code(201).send({ product });
 }

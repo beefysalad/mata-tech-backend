@@ -1,14 +1,37 @@
+import { AppError } from "../errors/app-error.js";
 import { prisma } from "../lib/prisma.js";
 import type { CreateSaleType } from "../schemas/sales.schema.js";
 
 export const createSaleRepository = async (data: CreateSaleType) => {
-  return await prisma.sale.create({
-    data: {
-      customerId: data.customerId,
-      productId: data.productId,
-      quantity: data.quantity,
-      saleDate: new Date(data.saleDate),
-    },
+  return await prisma.$transaction(async (tx) => {
+    const product = await tx.product.findUnique({
+      where: { id: data.productId },
+      select: { stock: true },
+    });
+
+    if (!product) {
+      throw new AppError("Product not found", 404);
+    }
+
+    if (product.stock < data.quantity) {
+      throw new AppError("Insufficient stock", 400);
+    }
+
+    await tx.product.update({
+      where: { id: data.productId },
+      data: {
+        stock: { decrement: data.quantity },
+      },
+    });
+
+    return await tx.sale.create({
+      data: {
+        customerId: data.customerId,
+        productId: data.productId,
+        quantity: data.quantity,
+        saleDate: new Date(data.saleDate),
+      },
+    });
   });
 };
 

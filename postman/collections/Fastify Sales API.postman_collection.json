@@ -563,7 +563,7 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
+                "id": "dbc947d7-afee-41d0-98d0-8afca5bf71ba",
                 "exec": [
                   "pm.test('Status code is 201 or 200', function () {",
                   "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
@@ -573,7 +573,22 @@
                   "  const jsonData = pm.response.json();",
                   "  pm.expect(jsonData).to.have.property('id');",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "7db14ef6-8702-4a9b-8f53-e677f29a7afe",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -588,7 +603,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customerId\": \"\",\n  \"items\": [\n    {\n      \"productId\": \"\",\n      \"quantity\": 1\n    }\n  ],\n  \"notes\": \"\"\n}",
+              "raw": "{\n  \"customerId\": \"cmmvok21y000033mmpbs02whv\",\n  \"productId\": \"cmmvokgy2000133mmb02v5kv4\",\n  \"quantity\": 1,\n  \"saleDate\": \"2026-03-18T10:00:00.000Z\"\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -596,11 +611,12 @@
               }
             },
             "url": {
-              "raw": "{{url}}/sales",
+              "raw": "{{url}}/api/sales",
               "host": [
                 "{{url}}"
               ],
               "path": [
+                "api",
                 "sales"
               ]
             }
