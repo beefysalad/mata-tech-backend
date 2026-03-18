@@ -10,11 +10,14 @@ import { productRoutes } from "./routes/product.routes.js";
 import { salesRoutes } from "./routes/sales.routes.js";
 import { swaggerPlugin } from "./plugins/swagger.js";
 import { errorHandlerPlugin } from "./plugins/error-handler.js";
+import { corsPlugin } from "./plugins/cors.js";
 
 export function buildServer() {
   const server = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
   server.setValidatorCompiler(validatorCompiler);
   server.setSerializerCompiler(serializerCompiler);
+
+  server.register(corsPlugin);
 
   server.register(swaggerPlugin);
   server.register(errorHandlerPlugin);
