@@ -26,7 +26,20 @@ This project implements the **1 Week JavaScript Backend Challenge** with a focus
 
 ## Quick Start
 
-### 1) Start PostgreSQL (Docker)
+### 0) Create `.env`
+
+Create a `.env` file (see `.env.example`):
+
+- `NODE_ENV`
+- `PORT`
+- `DATABASE_URL`
+
+Default Docker connection string:
+`postgresql://postgres:postgres@localhost:5433/sales_db`
+
+### 1) Start PostgreSQL
+
+**Option A: Docker (recommended)**
 
 ```bash
 docker compose up -d
@@ -38,10 +51,37 @@ If your Windows shell doesn't recognize `docker compose`:
 docker-compose up -d
 ```
 
-### 2) Install deps + run server
+**Option B: Local PostgreSQL**
+
+Make sure you have a local Postgres instance running and set `DATABASE_URL`
+to match your host/port/database.
+
+### 2) Install deps
 
 ```bash
 npm install
+```
+
+### 3) Run Prisma migrations + generate client
+
+```bash
+npm run migrate
+npm run generate
+```
+
+Note: The app Docker image runs `prisma migrate deploy` automatically on container start.
+This works on macOS and Windows because the container runs Linux; for local (non-Docker) dev,
+use the npm scripts above on any OS.
+
+### 4) (Optional) Seed data
+
+```bash
+SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
+```
+
+### 5) Run server
+
+```bash
 npm run dev
 ```
 
@@ -52,11 +92,14 @@ Server starts on:
 
 ## Environment
 
-Create a `.env` file (see `.env.example`):
+Required:
+
+- `DATABASE_URL`
+
+Optional:
 
 - `NODE_ENV`
 - `PORT`
-- `DATABASE_URL` (default: `postgresql://postgres:postgres@localhost:5433/sales_db`)
 
 ## Data Model
 
@@ -132,7 +175,7 @@ npm run seed
 
 ## Seeding (Faker)
 
-Seed customers and products:
+Seed customers, products, and sales:
 
 ```bash
 SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
