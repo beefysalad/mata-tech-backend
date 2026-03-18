@@ -105,7 +105,7 @@ Optional:
 ## Data Model
 
 - `Customer` (id, name, email, phone, createdAt, updatedAt)
-- `Product` (id, name, description, sku, price, createdAt, updatedAt)
+- `Product` (id, name, description, sku, price, stock, createdAt, updatedAt)
 - `Sale` (id, customerId, productId, quantity, saleDate, createdAt, updatedAt)
 
 ## API Endpoints

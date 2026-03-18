@@ -9,7 +9,13 @@ export const createProductRepository = async (
   data: CreateProductType,
 ): Promise<Product> => {
   return await prisma.product.create({
-    data,
+    data: {
+      name: data.name,
+      description: data.description,
+      sku: data.sku,
+      price: data.price,
+      ...(data.stock !== undefined && { stock: data.stock }),
+    },
   });
 };
 
@@ -49,6 +55,7 @@ export const updateProductByIdRepository = async (
       ...(data.description !== undefined && { description: data.description }),
       ...(data.sku !== undefined && { sku: data.sku }),
       ...(data.price !== undefined && { price: data.price }),
+      ...(data.stock !== undefined && { stock: data.stock }),
     },
   });
 };

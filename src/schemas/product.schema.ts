@@ -21,6 +21,7 @@ export const productSchema = z.object({
   description: z.string(),
   sku: z.string(),
   price: priceSchema,
+  stock: z.number().int().min(0),
   createdAt: dateTimeSchema,
   updatedAt: dateTimeSchema,
 });
@@ -30,6 +31,7 @@ export const createProductBodySchema = z.object({
   description: z.string().min(1),
   sku: z.string().min(1),
   price: z.number().positive(),
+  stock: z.number().int().min(0).optional(),
 });
 
 export const updateProductBodySchema = z.object({
@@ -37,6 +39,7 @@ export const updateProductBodySchema = z.object({
   description: z.string().min(1).optional(),
   sku: z.string().min(1).optional(),
   price: z.number().positive().optional(),
+  stock: z.number().int().min(0).optional(),
 });
 
 export const productByIdParamsSchema = z.object({

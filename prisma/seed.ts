@@ -22,6 +22,7 @@ async function main() {
     description: faker.commerce.productDescription(),
     sku: `SKU-${faker.string.alphanumeric({ length: 8 }).toUpperCase()}-${index}`,
     price: faker.number.float({ min: 1, max: 500, fractionDigits: 2 }),
+    stock: faker.number.int({ min: 0, max: 500 }),
   }));
 
   const customers = Array.from({ length: SEED_COUNT }).map((_, index) => ({
