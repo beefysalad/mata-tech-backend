@@ -1,4 +1,5 @@
-import { Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../errors/app-error.js";
+import { mapPrismaError } from "../errors/prisma-error.js";
 import {
   createSaleRepository,
   getSalesByMonthRepository,
@@ -12,12 +13,10 @@ export const createSaleService = async (data: CreateSaleType) => {
   try {
     return await createSaleRepository(data);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2003"
-    ) {
-      throw new Error("Invalid customer or product");
-    }
+    const mapped = mapPrismaError(error, {
+      P2003: { statusCode: 400, message: "Invalid customer or product" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };

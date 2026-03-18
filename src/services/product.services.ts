@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma/client.js";
+import { mapPrismaError } from "../errors/prisma-error.js";
 import {
   createProductRepository,
   deleteProductByIdRepository,
@@ -14,12 +14,10 @@ export const createProductService = async (data: CreateProductType) => {
   try {
     return await createProductRepository(data);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
-      throw new Error("Product already exists");
-    }
+    const mapped = mapPrismaError(error, {
+      P2002: { statusCode: 409, message: "Product already exists" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
@@ -39,12 +37,10 @@ export const updateProductByIdService = async (
   try {
     return await updateProductByIdRepository(id, data);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
-    ) {
-      throw new Error("Product not found");
-    }
+    const mapped = mapPrismaError(error, {
+      P2025: { statusCode: 404, message: "Product not found" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
@@ -53,12 +49,10 @@ export const deleteProductByIdService = async (id: string) => {
   try {
     return await deleteProductByIdRepository(id);
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
-    ) {
-      throw new Error("Product not found");
-    }
+    const mapped = mapPrismaError(error, {
+      P2025: { statusCode: 404, message: "Product not found" },
+    });
+    if (mapped) throw mapped;
     throw error;
   }
 };
