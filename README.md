@@ -74,6 +74,12 @@ npm run migrate
 SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
 ```
 
+If you are running the app via Docker Compose:
+
+```bash
+npm run seed:docker
+```
+
 5) Start the server:
 
 ```bash
