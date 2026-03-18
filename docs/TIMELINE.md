@@ -32,12 +32,19 @@
 - Added Product model and CRUD endpoints.
 - Added product seeding and product API tests.
 
-## Planned (Next 3–4 Days)
+## 2026-03-18 (Day 5)
 
-- Define DB schema (customers, products, sales) and migrations.
-- Implement `GET /sales?month=YYYY-MM` with proper joins.
-- Add validation and error handling.
+- Added Sales model and monthly sales query (`GET /api/sales?month=YYYY-MM`).
+- Implemented Sales create endpoint and route schemas.
+- Added pagination support to customers and products.
+- Updated list endpoints to sort by `createdAt` for stable paging.
+- Updated tests for pagination metadata.
+
+## Planned (Next 2–3 Days)
+
 - Add authentication (optional bonus).
+- Add enhanced error handling notes in docs.
+- Record demo walkthrough video.
 
 ## Final Days
 

@@ -59,6 +59,11 @@ server.route({
 - Fastify route tests can use `app.inject` without running a real server.
 - Vitest is a lightweight option for API tests in Node.
 - Added API tests for products (CRUD) alongside customers.
+- Pagination can be validated by asserting shape/metadata, not necessarily record position, when datasets are pre-seeded.
+
+## Pagination
+- `limit` and `offset` are simple, consistent defaults for list endpoints.
+- Sorting by `createdAt` helps keep pagination predictable across customers/products/sales.
 
 ## Resources
 ```text
