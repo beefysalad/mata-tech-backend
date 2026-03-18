@@ -29,6 +29,7 @@ describeIf("sales API", () => {
         description: "Sales test product description",
         sku: `SKU-SALES-${Date.now()}`,
         price: 19.99,
+        stock: 10,
       },
     });
     customerId = customer.id;
