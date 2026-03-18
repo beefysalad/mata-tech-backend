@@ -47,18 +47,15 @@ describeIf("customers API", () => {
   it("lists customers", async () => {
     const response = await app.inject({
       method: "GET",
-      url: "/api/customers/",
+      url: "/api/customers/?limit=1&offset=0",
     });
 
     expect(response.statusCode).toBe(200);
     const body = response.json();
     expect(Array.isArray(body.customers)).toBe(true);
-    if (createdCustomerId) {
-      const match = body.customers.find(
-        (customer: { id: string }) => customer.id === createdCustomerId,
-      );
-      expect(match).toBeDefined();
-    }
+    expect(body.limit).toBe(1);
+    expect(body.offset).toBe(0);
+    // Created customer may not be on the first page if the dataset is large.
   });
 
   it("updates a customer", async () => {

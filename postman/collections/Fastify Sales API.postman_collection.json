@@ -126,21 +126,67 @@
         },
         {
           "name": "Get All Customers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has customers array', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('customers');",
+                  "  pm.expect(jsonData.customers).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response includes pagination echo (limit, offset)', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('limit');",
+                  "  pm.expect(jsonData).to.have.property('offset');",
+                  "  pm.expect(jsonData.limit).to.be.a('number');",
+                  "  pm.expect(jsonData.offset).to.be.a('number');",
+                  "});",
+                  "",
+                  "pm.test('customers length is <= limit', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  if (typeof jsonData.limit === 'number') {",
+                  "    pm.expect(jsonData.customers.length).to.be.at.most(jsonData.limit);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
           "id": "c1250be0-bd90-4ae1-b44e-e302db14cfc5",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/customers",
+              "raw": "{{baseUrl}}/api/customers?limit=50&offset=0",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "customers"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Max number of customers to return. Optional. Default: 50. Min: 1. Max: 200."
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of customers to skip (0-based). Optional. Default: 0."
+                }
               ]
             },
-            "description": "Retrieves all customers. Response: `{ customers: Customer[] }`"
+            "description": "Retrieves customers with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"customers\": [/* Customer[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         },
@@ -237,6 +283,21 @@
                   "  const jsonData = pm.response.json();",
                   "  pm.expect(jsonData).to.have.property('products');",
                   "  pm.expect(jsonData.products).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response includes pagination echo (limit, offset)', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('limit');",
+                  "  pm.expect(jsonData).to.have.property('offset');",
+                  "  pm.expect(jsonData.limit).to.be.a('number');",
+                  "  pm.expect(jsonData.offset).to.be.a('number');",
+                  "});",
+                  "",
+                  "pm.test('products length is <= limit', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  if (typeof jsonData.limit === 'number') {",
+                  "    pm.expect(jsonData.products.length).to.be.at.most(jsonData.limit);",
+                  "  }",
                   "});"
                 ]
               }
@@ -247,16 +308,28 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products",
+              "raw": "{{baseUrl}}/api/products?limit=50&offset=0",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Max number of products to return. Optional. Default: 50. Min: 1. Max: 200."
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of products to skip (0-based). Optional. Default: 0."
+                }
               ]
             },
-            "description": "Retrieves all products. Response: `{ products: Product[] }`."
+            "description": "Retrieves products with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"products\": [/* Product[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         },
@@ -531,6 +604,104 @@
                 "sales"
               ]
             }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Sales",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "9084dcca-fc2b-451b-99f8-cc847f66642f",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has sales array', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('sales');",
+                  "  pm.expect(jsonData.sales).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response includes pagination echo (limit, offset)', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('limit');",
+                  "  pm.expect(jsonData).to.have.property('offset');",
+                  "  pm.expect(jsonData.limit).to.be.a('number');",
+                  "  pm.expect(jsonData.offset).to.be.a('number');",
+                  "});",
+                  "",
+                  "pm.test('sales length is <= limit', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  if (typeof jsonData.limit === 'number') {",
+                  "    pm.expect(jsonData.sales.length).to.be.at.most(jsonData.limit);",
+                  "  }",
+                  "});",
+                  "",
+                  "pm.test('month query param: if present, response month matches YYYY-MM', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  const monthParam = pm.request.url.query.find(q => q.key === 'month');",
+                  "  if (monthParam && monthParam.value) {",
+                  "    pm.expect(jsonData).to.have.property('month');",
+                  "    pm.expect(jsonData.month).to.eql(monthParam.value);",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "d48c949d-dd8c-4bfa-828d-f5ccb342f5b5",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "2c4b8d8e-2c4c-4b1e-8c46-e2c4f36d6fb7",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sales?month=2025-01&limit=50&offset=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sales"
+              ],
+              "query": [
+                {
+                  "key": "month",
+                  "value": "2025-01",
+                  "description": "Filter sales by month in YYYY-MM format (required by the API).",
+                  "uuid": "b6e94fea-254a-4b83-98a7-6957bce5d0b5"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Max number of sales to return. Optional. Default: 50. Min: 1. Max: 200.",
+                  "uuid": "355a4513-bbc6-4395-836b-3277c674c474"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of sales to skip (0-based). Optional. Default: 0.",
+                  "uuid": "e5f63569-bed5-41b5-8e98-57efdc8196db"
+                }
+              ]
+            },
+            "description": "Retrieves sales for a given month with offset pagination.\n\n**Query params**\n- `month` (string, **required**) — month filter in `YYYY-MM` format (e.g. `2025-01`).\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"month\": \"2025-01\",\n  \"sales\": [/* Sale[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         }

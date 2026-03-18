@@ -62,21 +62,21 @@ Create a `.env` file (see `.env.example`):
 
 - `Customer` (id, name, email, phone, createdAt, updatedAt)
 - `Product` (id, name, description, sku, price, createdAt, updatedAt)
-- `Sale` (planned: customer_id, product_id, quantity, sale_date)
+- `Sale` (id, customerId, productId, quantity, saleDate, createdAt, updatedAt)
 
 ## API Endpoints
 
 ### Customers
 
 - `POST /api/customers`
-- `GET /api/customers`
+- `GET /api/customers?limit=50&offset=0`
 - `PUT /api/customers/:id`
 - `DELETE /api/customers/:id`
 
 ### Products
 
 - `POST /api/products`
-- `GET /api/products`
+- `GET /api/products?limit=50&offset=0`
 - `PUT /api/products/:id`
 - `DELETE /api/products/:id`
 
