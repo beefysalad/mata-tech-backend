@@ -376,7 +376,7 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
+                "id": "9e6e0837-563a-492c-812b-e863c921ea30",
                 "exec": [
                   "pm.test('Status code is 200', function () {",
                   "  pm.response.to.have.status(200);",
@@ -394,7 +394,22 @@
                   "    pm.expect(pm.environment.get('productId')).to.eql(productId);",
                   "  });",
                   "});"
-                ]
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "2afda217-f717-4a7f-9df1-2dfd17f809f3",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -403,21 +418,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products/:id",
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "products",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{productId}}",
-                  "description": "Product UUID"
-                }
+                "{{productId}}"
               ]
             },
             "description": "Retrieves a product by ID. Response: `{ product: Product }`."
@@ -788,19 +796,19 @@
   ],
   "variable": [
     {
-      "id": "6ab4d3d5-b40f-4b28-af03-b2d42611ce45",
+      "id": "57fe8da8-200b-4fc2-b1ca-c4338e78420f",
       "key": "baseUrl",
       "value": "http://localhost:3000",
       "type": "string"
     },
     {
-      "id": "d705010e-1f0d-47dd-bf36-d57dd2e9ff51",
+      "id": "06a9029a-9d0b-4808-99eb-005c936e9d49",
       "key": "customerId",
       "value": "",
       "type": "string"
     },
     {
-      "id": "65fd71ca-8283-48f0-986c-a2a20b797342",
+      "id": "cfcda997-8b49-40ba-955d-5e6614313179",
       "key": "productId",
       "value": "",
       "type": "string"

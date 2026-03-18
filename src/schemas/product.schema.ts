@@ -2,7 +2,10 @@ import { z } from "zod";
 
 const priceSchema = z.preprocess((value) => {
   if (typeof value === "number") return value;
-  if (value && typeof (value as { toString: () => string }).toString === "function") {
+  if (
+    value &&
+    typeof (value as { toString: () => string }).toString === "function"
+  ) {
     return Number((value as { toString: () => string }).toString());
   }
   return value;
@@ -76,6 +79,14 @@ export const getAllProductRouteSchema = {
   querystring: getProductsQuerySchema,
   response: {
     200: productsResponseSchema,
+  },
+};
+
+export const getProductByIdRouteSchema = {
+  tags: ["Products"],
+  params: productByIdParamsSchema,
+  response: {
+    200: productResponseSchema,
   },
 };
 

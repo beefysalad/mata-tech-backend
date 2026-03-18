@@ -43,6 +43,28 @@ export const saleWithDetailsSchema = z.object({
   }),
 });
 
+const salesSummaryBaseSchema = z.object({
+  totalSales: z.number().int().min(0),
+  totalQuantity: z.number().int().min(0),
+  totalRevenue: z.number().min(0),
+});
+
+const customerTotalsSchema = z.object({
+  customerId: z.string().min(1),
+  customerName: z.string(),
+  totalQuantity: z.number().int().min(0),
+  totalRevenue: z.number().min(0),
+  totalSales: z.number().int().min(0),
+});
+
+const productTotalsSchema = z.object({
+  productId: z.string().min(1),
+  productName: z.string(),
+  totalQuantity: z.number().int().min(0),
+  totalRevenue: z.number().min(0),
+  totalSales: z.number().int().min(0),
+});
+
 export const createSaleBodySchema = z.object({
   customerId: z.string().min(1),
   productId: z.string().min(1),
@@ -75,6 +97,10 @@ export const getSalesByMonthRouteSchema = {
       sales: z.array(saleWithDetailsSchema),
       limit: z.number().int().min(1),
       offset: z.number().int().min(0),
+      summary: salesSummaryBaseSchema.extend({
+        topCustomers: z.array(customerTotalsSchema),
+        topProducts: z.array(productTotalsSchema),
+      }),
     }),
   },
 };

@@ -9,6 +9,7 @@ import {
   createProductService,
   deleteProductByIdService,
   getAllProductService,
+  getProductByIdService,
   updateProductByIdService,
 } from "../services/product.services.js";
 
@@ -35,6 +36,15 @@ export async function getAllProductController(
 ) {
   const result = await getAllProductService(_request.query);
   return _reply.code(200).send(result);
+}
+
+export async function getProductByIdController(
+  _request: FastifyRequest<{ Params: ProductByIdParams }>,
+  _reply: FastifyReply,
+) {
+  const { id } = _request.params;
+  const product = await getProductByIdService(id);
+  return _reply.code(200).send({ product });
 }
 
 // UPDATE
