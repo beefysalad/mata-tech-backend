@@ -92,6 +92,43 @@
       "item": [
         {
           "name": "Create Customer",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "6c8e195e-52a9-4fbf-a935-5b71be380a8b",
+                "exec": [
+                  "const ts = Date.now();",
+                  "pm.environment.set('customerName', `John Patrick ${ts}`);",
+                  "pm.environment.set('customerEmail', `john.${ts}@patrick.com`);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "6ee14ade-acb6-4520-9b30-38476d7a28bf",
+                "exec": [
+                  "pm.test('Status code is 201 or 200', function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response has customer object', function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property('customer');",
+                  "  pm.expect(jsonData.customer).to.be.an('object');",
+                  "  pm.environment.set('customerId', jsonData.customer.id);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "id": "42ea40ea-a29a-457b-8817-ff432eaa0238",
           "request": {
             "method": "POST",
@@ -103,7 +140,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}",
+              "raw": "{\n  \"name\": \"{{customerName}}\",\n  \"email\": \"{{customerEmail}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -349,6 +386,13 @@
                   "  const jsonData = pm.response.json();",
                   "  pm.expect(jsonData).to.have.property('product');",
                   "  pm.expect(jsonData.product).to.be.an('object');",
+                  "  const productId = jsonData.product.id;",
+                  "  pm.environment.set('productId', productId);",
+                  "  pm.collectionVariables.set('productId', productId);",
+                  "  pm.variables.set('productId', productId);",
+                  "  pm.test('productId saved to environment', function () {",
+                  "    pm.expect(pm.environment.get('productId')).to.eql(productId);",
+                  "  });",
                   "});"
                 ]
               }
@@ -396,7 +440,17 @@
                   "  const jsonData = pm.response.json();",
                   "  pm.expect(jsonData).to.have.property('product');",
                   "  pm.expect(jsonData.product).to.be.an('object');",
-                  "});"
+                  "",
+                  "  const productId = jsonData.product.id;",
+                  "  pm.environment.set('productId', productId);",
+                  "  pm.collectionVariables.set('productId', productId);",
+                  "  pm.variables.set('productId', productId);",
+                  "",
+                  "  pm.test('productId saved to environment', function () {",
+                  "    pm.expect(pm.environment.get('productId')).to.eql(productId);",
+                  "  });",
+                  "});",
+                  ""
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -408,6 +462,9 @@
               "script": {
                 "id": "d41b220c-2b30-499c-81fb-8f923093f3a8",
                 "exec": [
+                  "const ts = Date.now();",
+                  "pm.environment.set('productName', `Widget ${ts}`);",
+                  "pm.environment.set('productSku', `SKU-DEMO-${ts}`);",
                   ""
                 ],
                 "type": "text/javascript",
@@ -427,7 +484,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Widget A\",\n  \"description\": \"A high-quality widget for your needs.\",\n  \"sku\": \"WIDGET-A\",\n  \"price\": 19.99,\n  \"inStock\": true\n}",
+              "raw": "{\n  \"name\": \"{{productName}}\",\n  \"description\": \"A high-quality widget for your needs.\",\n  \"sku\": \"{{productSku}}\",\n  \"price\": 19.99,\n  \"stock\": 25\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -444,7 +501,7 @@
                 "products"
               ]
             },
-            "description": "Creates a new product. Body fields: `name` (string), `sku` (string), `price` (number), `inStock` (boolean). Returns the created product object."
+            "description": "Creates a new product. Body fields: `name` (string), `sku` (string), `price` (number), `stock` (integer). Returns the created product object."
           },
           "response": []
         },
@@ -480,7 +537,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Widget A (Updated)\",\n  \"sku\": \"WIDGET-A\",\n  \"price\": 24.99,\n  \"inStock\": false\n}",
+              "raw": "{\n  \"name\": \"Widget A (Updated)\",\n  \"sku\": \"WIDGET-A\",\n  \"price\": 24.99,\n  \"stock\": 15\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -505,7 +562,7 @@
                 }
               ]
             },
-            "description": "Updates an existing product by ID. Body fields: `name` (string), `sku` (string), `price` (number), `inStock` (boolean). Returns the updated product object."
+            "description": "Updates an existing product by ID. Body fields: `name` (string), `sku` (string), `price` (number), `stock` (integer). Returns the updated product object."
           },
           "response": []
         },
@@ -569,9 +626,10 @@
                   "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
                   "});",
                   "",
-                  "pm.test('Response has id', function () {",
+                  "pm.test('Response has sale object', function () {",
                   "  const jsonData = pm.response.json();",
-                  "  pm.expect(jsonData).to.have.property('id');",
+                  "  pm.expect(jsonData).to.have.property('sale');",
+                  "  pm.environment.set('saleId', jsonData.sale.id);",
                   "});"
                 ],
                 "type": "text/javascript",
@@ -584,7 +642,9 @@
               "script": {
                 "id": "7db14ef6-8702-4a9b-8f53-e677f29a7afe",
                 "exec": [
-                  ""
+                  "const now = new Date();",
+                  "pm.environment.set('saleDate', now.toISOString());",
+                  "pm.environment.set('saleMonth', now.toISOString().slice(0, 7));"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -603,7 +663,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customerId\": \"cmmvok21y000033mmpbs02whv\",\n  \"productId\": \"cmmvokgy2000133mmb02v5kv4\",\n  \"quantity\": 1,\n  \"saleDate\": \"2026-03-18T10:00:00.000Z\"\n}\n",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 1,\n  \"saleDate\": \"{{saleDate}}\"\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -611,9 +671,9 @@
               }
             },
             "url": {
-              "raw": "{{url}}/api/sales",
+              "raw": "{{baseUrl}}/api/sales",
               "host": [
-                "{{url}}"
+                "{{baseUrl}}"
               ],
               "path": [
                 "api",
@@ -688,7 +748,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/sales?month=2025-01&limit=50&offset=0",
+              "raw": "{{baseUrl}}/api/sales?month={{saleMonth}}&limit=50&offset=0",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -699,7 +759,7 @@
               "query": [
                 {
                   "key": "month",
-                  "value": "2025-01",
+                  "value": "{{saleMonth}}",
                   "description": "Filter sales by month in YYYY-MM format (required by the API).",
                   "uuid": "b6e94fea-254a-4b83-98a7-6957bce5d0b5"
                 },
@@ -728,19 +788,19 @@
   ],
   "variable": [
     {
-      "id": "ca6c6027-1f6e-4e5d-8742-a5aef03d2c13",
+      "id": "6ab4d3d5-b40f-4b28-af03-b2d42611ce45",
       "key": "baseUrl",
       "value": "http://localhost:3000",
       "type": "string"
     },
     {
-      "id": "1785ab30-b064-43d4-8046-b7e6d0aec584",
+      "id": "d705010e-1f0d-47dd-bf36-d57dd2e9ff51",
       "key": "customerId",
       "value": "",
       "type": "string"
     },
     {
-      "id": "f2ecde0a-aec4-4db0-92fb-17a9b8acc76a",
+      "id": "65fd71ca-8283-48f0-986c-a2a20b797342",
       "key": "productId",
       "value": "",
       "type": "string"

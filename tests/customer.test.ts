@@ -44,6 +44,32 @@ describeIf("customers API", () => {
     createdCustomerId = body.customer.id;
   });
 
+  it("rejects invalid customer payload", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/customers/",
+      payload: {
+        name: "",
+        email: "not-an-email",
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it("rejects duplicate customer email", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/customers/",
+      payload: {
+        name: "Dup Customer",
+        email: testEmail,
+      },
+    });
+
+    expect(response.statusCode).toBe(409);
+  });
+
   it("lists customers", async () => {
     const response = await app.inject({
       method: "GET",
@@ -78,6 +104,18 @@ describeIf("customers API", () => {
     expect(body.customer.name).toBe("Updated Customer");
   });
 
+  it("returns 404 when updating missing customer", async () => {
+    const response = await app.inject({
+      method: "PUT",
+      url: "/api/customers/nonexistent",
+      payload: {
+        name: "Should Fail",
+      },
+    });
+
+    expect(response.statusCode).toBe(404);
+  });
+
   it("deletes a customer", async () => {
     if (!createdCustomerId) {
       throw new Error("Missing customer id from create test");
@@ -94,5 +132,14 @@ describeIf("customers API", () => {
     expect(body.customer.id).toBe(createdCustomerId);
 
     createdCustomerId = undefined;
+  });
+
+  it("returns 404 when deleting missing customer", async () => {
+    const response = await app.inject({
+      method: "DELETE",
+      url: "/api/customers/nonexistent",
+    });
+
+    expect(response.statusCode).toBe(404);
   });
 });

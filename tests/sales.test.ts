@@ -72,6 +72,22 @@ describeIf("sales API", () => {
     saleId = body.sale.id;
   });
 
+  it("rejects sale when stock is insufficient", async () => {
+    const saleDate = new Date(Date.UTC(2026, 2, 15, 12, 0, 0)).toISOString();
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/sales/",
+      payload: {
+        customerId,
+        productId,
+        quantity: 999,
+        saleDate,
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it("lists sales by month with pagination", async () => {
     const month = "2026-03";
 
