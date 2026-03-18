@@ -99,7 +99,7 @@
                 "id": "6c8e195e-52a9-4fbf-a935-5b71be380a8b",
                 "exec": [
                   "const ts = Date.now();",
-                  "pm.environment.set('customerName', `John Patrick ${ts}`);",
+                  "pm.environment.set('customerName', \"John Patrick\");",
                   "pm.environment.set('customerEmail', `john.${ts}@patrick.com`);"
                 ],
                 "type": "text/javascript",
@@ -471,7 +471,7 @@
                 "id": "d41b220c-2b30-499c-81fb-8f923093f3a8",
                 "exec": [
                   "const ts = Date.now();",
-                  "pm.environment.set('productName', `Widget ${ts}`);",
+                  "pm.environment.set('productName', \"Widget\");",
                   "pm.environment.set('productSku', `SKU-DEMO-${ts}`);",
                   ""
                 ],

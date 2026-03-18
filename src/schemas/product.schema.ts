@@ -66,6 +66,17 @@ const productsResponseSchema = z.object({
   offset: z.number().int().min(0),
 });
 
+const productSummarySchema = z.object({
+  totalProducts: z.number().int().min(0),
+  totalStock: z.number().int().min(0),
+  lowStock: z.number().int().min(0),
+  averagePrice: z.number().min(0),
+});
+
+const productSummaryResponseSchema = z.object({
+  summary: productSummarySchema,
+});
+
 export const createProductRouteSchema = {
   tags: ["Products"],
   body: createProductBodySchema,
@@ -87,6 +98,13 @@ export const getProductByIdRouteSchema = {
   params: productByIdParamsSchema,
   response: {
     200: productResponseSchema,
+  },
+};
+
+export const getProductSummaryRouteSchema = {
+  tags: ["Products"],
+  response: {
+    200: productSummaryResponseSchema,
   },
 };
 

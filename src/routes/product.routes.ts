@@ -4,6 +4,7 @@ import {
   createProductController,
   deleteProductByIdController,
   getAllProductController,
+  getProductSummaryController,
   updateProductByIdController,
   getProductByIdController,
 } from "../controllers/product.controller.js";
@@ -12,6 +13,7 @@ import {
   deleteProductByIdRouteSchema,
   getAllProductRouteSchema,
   getProductByIdRouteSchema,
+  getProductSummaryRouteSchema,
   updateProductByIdRouteSchema,
 } from "../schemas/product.schema.js";
 
@@ -21,6 +23,12 @@ export async function productRoutes(server: FastifyInstance) {
   app.post("/", { schema: createProductRouteSchema }, createProductController);
 
   app.get("/", { schema: getAllProductRouteSchema }, getAllProductController);
+
+  app.get(
+    "/summary",
+    { schema: getProductSummaryRouteSchema },
+    getProductSummaryController,
+  );
 
   app.get(
     "/:id",

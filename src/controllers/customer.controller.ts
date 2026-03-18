@@ -17,8 +17,12 @@ export async function createCustomerController(
   _request: FastifyRequest<{ Body: CreateCustomerType }>,
   _reply: FastifyReply,
 ) {
-  const { email, name } = _request.body;
-  const customer = await createCustomerService({ email, name });
+  const { email, name, phone } = _request.body;
+  const customer = await createCustomerService({
+    email,
+    name,
+    phone: phone ?? null,
+  });
   return _reply.code(201).send({ customer });
 }
 

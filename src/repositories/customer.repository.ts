@@ -9,7 +9,11 @@ export const createCustomerRepository = async (
   data: CreateCustomerType,
 ): Promise<Customer> => {
   return await prisma.customer.create({
-    data,
+    data: {
+      name: data.name,
+      email: data.email,
+      ...(data.phone !== undefined && { phone: data.phone }),
+    },
   });
 };
 

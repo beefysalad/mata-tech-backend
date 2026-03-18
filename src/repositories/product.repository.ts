@@ -42,6 +42,24 @@ export const getAllProductRepository = async (
   });
 };
 
+export const getProductSummaryRepository = async () => {
+  const [aggregate, lowStock] = await Promise.all([
+    prisma.product.aggregate({
+      _sum: { stock: true },
+      _avg: { price: true },
+      _count: { _all: true },
+    }),
+    prisma.product.count({ where: { stock: { lte: 5 } } }),
+  ]);
+
+  return {
+    totalProducts: aggregate._count._all ?? 0,
+    totalStock: aggregate._sum.stock ?? 0,
+    averagePrice: aggregate._avg.price ? aggregate._avg.price.toNumber() : 0,
+    lowStock,
+  };
+};
+
 export const deleteProductByIdRepository = async (
   id: string,
 ): Promise<Product> => {

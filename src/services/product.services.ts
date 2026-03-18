@@ -5,6 +5,7 @@ import {
   deleteProductByIdRepository,
   getAllProductRepository,
   getProductByIdRepository,
+  getProductSummaryRepository,
   updateProductByIdRepository,
 } from "../repositories/product.repository.js";
 import type {
@@ -43,6 +44,14 @@ export const getAllProductService = async (query: GetProductsQuery) => {
     const offset = query.offset ?? 0;
     const products = await getAllProductRepository(limit, offset);
     return { products, limit, offset };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductSummaryService = async () => {
+  try {
+    return await getProductSummaryRepository();
   } catch (error) {
     throw error;
   }

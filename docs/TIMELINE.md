@@ -39,6 +39,8 @@
 - Added pagination support to customers and products.
 - Updated list endpoints to sort by `createdAt` for stable paging.
 - Updated tests for pagination metadata.
+- Added product summary endpoint for stock + pricing aggregates.
+- Fixed create-customer flow to persist phone numbers.
 
 ## Planned (Next 2–3 Days)
 
