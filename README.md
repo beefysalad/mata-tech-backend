@@ -26,20 +26,21 @@ This project implements the **1 Week JavaScript Backend Challenge** with a focus
 
 ## Quick Start
 
-### 0) Create `.env`
+### Environment (Both)
 
 Create a `.env` file (see `.env.example`):
 
-- `NODE_ENV`
-- `PORT`
-- `DATABASE_URL`
+- `NODE_ENV` (optional)
+- `PORT` (optional)
+- `DATABASE_URL` (required)
 
 Default Docker connection string:
 `postgresql://postgres:postgres@localhost:5433/sales_db`
 
-### 1) Start PostgreSQL
+### Option A: Docker (DB + App)
 
-**Option A: Docker (recommended) — starts DB + app**
+This starts **both** Postgres and the API, runs Prisma migrations automatically,
+and exposes the API at `http://localhost:3000`.
 
 ```bash
 docker compose up --build
@@ -51,37 +52,29 @@ If your Windows shell doesn't recognize `docker compose`:
 docker-compose up --build
 ```
 
-This runs the app container, applies Prisma migrations on start,
-and exposes the API on `http://localhost:3000`.
+### Option B: Local Dev (Postgres + App)
 
-**Option B: Local PostgreSQL**
+1) Start Postgres locally and set `DATABASE_URL` to match your instance.
 
-Make sure you have a local Postgres instance running and set `DATABASE_URL`
-to match your host/port/database.
-
-### 2) Install deps (local dev only)
+2) Install dependencies (also runs `prisma generate` via `postinstall`):
 
 ```bash
 npm install
 ```
 
-### 3) Run Prisma migrations + generate client (local dev only)
+3) Run Prisma migrations:
 
 ```bash
 npm run migrate
-npm run generate
 ```
 
-Note: The app Docker image runs `prisma migrate deploy` automatically on container start.
-This works on macOS and Windows because the container runs Linux.
-
-### 4) (Optional) Seed data (local dev only)
+4) (Optional) Seed data:
 
 ```bash
 SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
 ```
 
-### 5) Run server (local dev only)
+5) Start the server:
 
 ```bash
 npm run dev
