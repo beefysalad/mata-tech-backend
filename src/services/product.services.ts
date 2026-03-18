@@ -7,6 +7,7 @@ import {
 } from "../repositories/product.repository.js";
 import type {
   CreateProductType,
+  GetProductsQuery,
   UpdateProductBody,
 } from "../schemas/product.schema.js";
 
@@ -22,9 +23,12 @@ export const createProductService = async (data: CreateProductType) => {
   }
 };
 
-export const getAllProductService = async () => {
+export const getAllProductService = async (query: GetProductsQuery) => {
   try {
-    return await getAllProductRepository();
+    const limit = query.limit ?? 50;
+    const offset = query.offset ?? 0;
+    const products = await getAllProductRepository(limit, offset);
+    return { products, limit, offset };
   } catch (error) {
     throw error;
   }

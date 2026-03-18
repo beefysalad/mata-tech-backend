@@ -13,8 +13,17 @@ export const createCustomerRepository = async (
   });
 };
 
-export const getAllCustomerRepository = async (): Promise<Customer[] | []> => {
-  return await prisma.customer.findMany();
+export const getAllCustomerRepository = async (
+  limit: number,
+  offset: number,
+): Promise<Customer[] | []> => {
+  return await prisma.customer.findMany({
+    take: limit,
+    skip: offset,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 export const deleteCustomerByIdRepository = async (

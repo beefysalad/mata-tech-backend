@@ -2,6 +2,7 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 import type {
   CreateCustomerType,
   CustomerByIdParams,
+  GetCustomersQuery,
   UpdateCustomerBody,
 } from "../schemas/customer.schema.js";
 import {
@@ -23,11 +24,11 @@ export async function createCustomerController(
 
 //READ
 export async function getAllCustomerController(
-  _request: FastifyRequest,
+  _request: FastifyRequest<{ Querystring: GetCustomersQuery }>,
   _reply: FastifyReply,
 ) {
-  const customers = await getAllCustomerService();
-  return _reply.code(200).send({ customers });
+  const result = await getAllCustomerService(_request.query);
+  return _reply.code(200).send(result);
 }
 
 //UPDATE

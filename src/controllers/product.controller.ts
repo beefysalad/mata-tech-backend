@@ -1,6 +1,7 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type {
   CreateProductType,
+  GetProductsQuery,
   ProductByIdParams,
   UpdateProductBody,
 } from "../schemas/product.schema.js";
@@ -28,11 +29,11 @@ export async function createProductController(
 
 // READ
 export async function getAllProductController(
-  _request: FastifyRequest,
+  _request: FastifyRequest<{ Querystring: GetProductsQuery }>,
   _reply: FastifyReply,
 ) {
-  const products = await getAllProductService();
-  return _reply.code(200).send({ products });
+  const result = await getAllProductService(_request.query);
+  return _reply.code(200).send(result);
 }
 
 // UPDATE

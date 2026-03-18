@@ -43,13 +43,21 @@ export const productByIdParamsSchema = z.object({
   id: productIdSchema,
 });
 
+export const getProductsQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(200).optional(),
+  offset: z.coerce.number().int().min(0).optional(),
+});
+
 export type CreateProductType = z.infer<typeof createProductBodySchema>;
 export type UpdateProductBody = z.infer<typeof updateProductBodySchema>;
 export type ProductByIdParams = z.infer<typeof productByIdParamsSchema>;
+export type GetProductsQuery = z.infer<typeof getProductsQuerySchema>;
 
 const productResponseSchema = z.object({ product: productSchema });
 const productsResponseSchema = z.object({
   products: z.array(productSchema),
+  limit: z.number().int().min(1),
+  offset: z.number().int().min(0),
 });
 
 export const createProductRouteSchema = {
@@ -62,6 +70,7 @@ export const createProductRouteSchema = {
 
 export const getAllProductRouteSchema = {
   tags: ["Products"],
+  querystring: getProductsQuerySchema,
   response: {
     200: productsResponseSchema,
   },

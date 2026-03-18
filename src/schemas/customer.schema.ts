@@ -30,13 +30,21 @@ export const customerByIdParamsSchema = z.object({
   id: customerIdSchema,
 });
 
+export const getCustomersQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(200).optional(),
+  offset: z.coerce.number().int().min(0).optional(),
+});
+
 export type CreateCustomerType = z.infer<typeof createCustomerBodySchema>;
 export type UpdateCustomerBody = z.infer<typeof updateCustomerBodySchema>;
 export type CustomerByIdParams = z.infer<typeof customerByIdParamsSchema>;
+export type GetCustomersQuery = z.infer<typeof getCustomersQuerySchema>;
 
 const customerResponseSchema = z.object({ customer: customerSchema });
 const customersResponseSchema = z.object({
   customers: z.array(customerSchema),
+  limit: z.number().int().min(1),
+  offset: z.number().int().min(0),
 });
 
 export const createCustomerRouteSchema = {
@@ -49,6 +57,7 @@ export const createCustomerRouteSchema = {
 
 export const getAllCustomerRouteSchema = {
   tags: ["Customers"],
+  querystring: getCustomersQuerySchema,
   response: {
     200: customersResponseSchema,
   },

@@ -8,6 +8,7 @@ import {
 } from "../repositories/customer.repository.js";
 import type {
   CreateCustomerType,
+  GetCustomersQuery,
   UpdateCustomerBody,
 } from "../schemas/customer.schema.js";
 
@@ -23,9 +24,12 @@ export const createCustomerService = async (data: CreateCustomerType) => {
   }
 };
 
-export const getAllCustomerService = async () => {
+export const getAllCustomerService = async (query: GetCustomersQuery) => {
   try {
-    return await getAllCustomerRepository();
+    const limit = query.limit ?? 50;
+    const offset = query.offset ?? 0;
+    const customers = await getAllCustomerRepository(limit, offset);
+    return { customers, limit, offset };
   } catch (error) {
     throw error;
   }
