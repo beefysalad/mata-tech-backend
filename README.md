@@ -39,30 +39,33 @@ Default Docker connection string:
 
 ### 1) Start PostgreSQL
 
-**Option A: Docker (recommended)**
+**Option A: Docker (recommended) — starts DB + app**
 
 ```bash
-docker compose up -d
+docker compose up --build
 ```
 
 If your Windows shell doesn't recognize `docker compose`:
 
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
+
+This runs the app container, applies Prisma migrations on start,
+and exposes the API on `http://localhost:3000`.
 
 **Option B: Local PostgreSQL**
 
 Make sure you have a local Postgres instance running and set `DATABASE_URL`
 to match your host/port/database.
 
-### 2) Install deps
+### 2) Install deps (local dev only)
 
 ```bash
 npm install
 ```
 
-### 3) Run Prisma migrations + generate client
+### 3) Run Prisma migrations + generate client (local dev only)
 
 ```bash
 npm run migrate
@@ -70,16 +73,15 @@ npm run generate
 ```
 
 Note: The app Docker image runs `prisma migrate deploy` automatically on container start.
-This works on macOS and Windows because the container runs Linux; for local (non-Docker) dev,
-use the npm scripts above on any OS.
+This works on macOS and Windows because the container runs Linux.
 
-### 4) (Optional) Seed data
+### 4) (Optional) Seed data (local dev only)
 
 ```bash
 SEED_COUNT=200 SEED_BATCH_SIZE=50 npm run seed
 ```
 
-### 5) Run server
+### 5) Run server (local dev only)
 
 ```bash
 npm run dev
