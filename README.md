@@ -5,6 +5,7 @@ Enterprise‑style Fastify + TypeScript backend for the 1‑week learning challe
 ## Challenge Overview
 
 This project implements the **1 Week JavaScript Backend Challenge** with a focus on:
+
 - Rapid learning and application of a new backend framework
 - Clean architecture and code organization
 - Practical REST API design and documentation
@@ -12,8 +13,7 @@ This project implements the **1 Week JavaScript Backend Challenge** with a focus
 
 ## Status
 
-- Current: Customer + Product CRUD, Swagger docs, seeding, and API tests
-- In progress: Sales model + monthly sales query
+- Current: Customer + Product CRUD, Sales CRUD, monthly sales query, Swagger docs, seeding, and API tests
 
 ## Tech Stack
 
@@ -46,6 +46,7 @@ npm run dev
 ```
 
 Server starts on:
+
 - API: `http://localhost:3000`
 - Swagger UI: `http://localhost:3000/api/docs`
 
@@ -66,19 +67,55 @@ Create a `.env` file (see `.env.example`):
 ## API Endpoints
 
 ### Customers
+
 - `POST /api/customers`
 - `GET /api/customers`
 - `PUT /api/customers/:id`
 - `DELETE /api/customers/:id`
 
 ### Products
+
 - `POST /api/products`
 - `GET /api/products`
 - `PUT /api/products/:id`
 - `DELETE /api/products/:id`
 
+### Sales
+
+- `POST /api/sales`
+- `GET /api/sales?month=YYYY-MM`
+
 Swagger UI is the source of truth for request/response contracts:
 `http://localhost:3000/api/docs`
+
+## Example Requests
+
+Create a sale:
+
+```bash
+curl -X POST http://localhost:3000/api/sales \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerId": "cust_123",
+    "productId": "prod_456",
+    "quantity": 2,
+    "saleDate": "2024-06-15T10:00:00.000Z"
+  }'
+```
+
+Get sales for a month (with pagination):
+
+```bash
+curl "http://localhost:3000/api/sales?month=2024-06&limit=50&offset=0"
+```
+
+## Checklist (Challenge)
+
+- [x] Use Fastify (chosen framework)
+- [x] Customers, Products, Sales tables (Prisma)
+- [x] Monthly sales query (`GET /api/sales?month=YYYY-MM`)
+- [x] Modern TypeScript codebase
+- [x] RESTful API + Swagger docs
 
 ## Database (Prisma)
 
