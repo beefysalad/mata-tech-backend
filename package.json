@@ -7,7 +7,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "start": "npx tsc && node dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
+    "dev": "nodemon --watch src --ext ts --exec tsx src/index.ts",
     "prisma": "prisma",
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
