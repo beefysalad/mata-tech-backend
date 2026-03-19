@@ -47,6 +47,8 @@ const salesSummaryBaseSchema = z.object({
   totalSales: z.number().int().min(0),
   totalQuantity: z.number().int().min(0),
   totalRevenue: z.number().min(0),
+  peakDay: z.string().nullable(),
+  peakRevenue: z.number().min(0),
 });
 
 const customerTotalsSchema = z.object({
