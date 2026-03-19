@@ -87,6 +87,7 @@ export const getSalesByMonthSummaryRepository = async (
     select: {
       id: true,
       quantity: true,
+      saleDate: true,
       product: {
         select: {
           id: true,

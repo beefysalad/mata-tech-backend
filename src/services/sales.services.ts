@@ -59,6 +59,7 @@ export const getSalesByMonthService = async (
         totalSales: number;
       }
     >();
+    const dayRevenueMap = new Map<string, number>();
 
     for (const row of rows) {
       const price = Number(
@@ -69,6 +70,9 @@ export const getSalesByMonthService = async (
       const revenue = row.quantity * price;
       totalQuantity += row.quantity;
       totalRevenue += revenue;
+
+      const dayKey = row.saleDate.toISOString().slice(0, 10);
+      dayRevenueMap.set(dayKey, (dayRevenueMap.get(dayKey) ?? 0) + revenue);
 
       if (row.customer) {
         const existingCustomer = customerMap.get(row.customer.id);
@@ -112,10 +116,19 @@ export const getSalesByMonthService = async (
       (a, b) => b.totalRevenue - a.totalRevenue,
     );
 
+    const peakEntry = Array.from(dayRevenueMap.entries()).reduce<
+      { day: string; revenue: number } | null
+    >((best, [day, revenue]) => {
+      if (!best || revenue > best.revenue) return { day, revenue };
+      return best;
+    }, null);
+
     return {
       totalSales: rows.length,
       totalQuantity,
       totalRevenue: Number(totalRevenue.toFixed(2)),
+      peakDay: peakEntry?.day ?? null,
+      peakRevenue: Number((peakEntry?.revenue ?? 0).toFixed(2)),
       topCustomers: customerTotals.slice(0, 5),
       topProducts: productTotals.slice(0, 5),
     };
