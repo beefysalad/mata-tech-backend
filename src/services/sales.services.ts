@@ -35,6 +35,7 @@ export const getSalesByMonthService = async (
   const offset = query.offset ?? 0;
 
   const sales = await getSalesByMonthRepository(from, to, limit, offset);
+  // Summary uses the full month dataset (not paginated) for accurate totals/peaks.
   const summaryRows = await getSalesByMonthSummaryRepository(from, to);
   const buildSummary = (rows: typeof summaryRows) => {
     let totalQuantity = 0;
@@ -59,6 +60,7 @@ export const getSalesByMonthService = async (
         totalSales: number;
       }
     >();
+    // Track total revenue per day to compute the peak day.
     const dayRevenueMap = new Map<string, number>();
 
     for (const row of rows) {

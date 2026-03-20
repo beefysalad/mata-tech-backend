@@ -12,7 +12,6 @@ Enterprise‑style Fastify + TypeScript backend for the 1‑week JavaScript back
 ## Status
 
 - Current: Customer + Product CRUD, Sales CRUD, monthly sales query, Swagger docs, seeding, API tests, JWT auth.
-- Demo: A simple Next.js frontend was created for walkthroughs. Clone it here: `[GITHUB_LINK_HERE]` (replace later).
 
 ## Tech Stack
 
