@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildServer } from "../src/app.js";
+import { createAdminAndLogin } from "./helpers/auth.js";
 
 const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
 const describeIf = hasDatabaseUrl ? describe : describe.skip;
@@ -13,10 +14,15 @@ describeIf("sales API", () => {
   let customerId: string | undefined;
   let productId: string | undefined;
   let saleId: string | undefined;
+  let authToken: string | undefined;
+  let adminId: string | undefined;
 
   beforeAll(async () => {
     await app.ready();
     prisma = (await import("../src/lib/prisma.js")).prisma;
+    const auth = await createAdminAndLogin(app, prisma);
+    authToken = auth.token;
+    adminId = auth.adminId;
     const customer = await prisma.customer.create({
       data: {
         name: "Sales Test Customer",
@@ -47,6 +53,9 @@ describeIf("sales API", () => {
       if (customerId) {
         await prisma.customer.deleteMany({ where: { id: customerId } });
       }
+      if (adminId) {
+        await prisma.admin.delete({ where: { id: adminId } });
+      }
     }
     await app.close();
   });
@@ -56,6 +65,9 @@ describeIf("sales API", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/sales/",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         customerId,
         productId,
@@ -77,6 +89,9 @@ describeIf("sales API", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/sales/",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         customerId,
         productId,
@@ -94,6 +109,9 @@ describeIf("sales API", () => {
     const response = await app.inject({
       method: "GET",
       url: `/api/sales/?month=${month}&limit=50&offset=0`,
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
     });
 
     expect(response.statusCode).toBe(200);

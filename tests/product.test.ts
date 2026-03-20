@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildServer } from "../src/app.js";
+import { createAdminAndLogin } from "./helpers/auth.js";
 
 const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
 const describeIf = hasDatabaseUrl ? describe : describe.skip;
@@ -9,6 +10,8 @@ describeIf("products API", () => {
   const app = buildServer();
   const testSku = `SKU-TEST-${Date.now()}`;
   let createdProductId: string | undefined;
+  let authToken: string | undefined;
+  let adminId: string | undefined;
   let prisma:
     | typeof import("../src/lib/prisma.js").prisma
     | undefined = undefined;
@@ -16,6 +19,9 @@ describeIf("products API", () => {
   beforeAll(async () => {
     await app.ready();
     prisma = (await import("../src/lib/prisma.js")).prisma;
+    const auth = await createAdminAndLogin(app, prisma);
+    authToken = auth.token;
+    adminId = auth.adminId;
   });
 
   afterAll(async () => {
@@ -23,6 +29,9 @@ describeIf("products API", () => {
       await prisma.product.deleteMany({
         where: { sku: testSku },
       });
+      if (adminId) {
+        await prisma.admin.delete({ where: { id: adminId } });
+      }
     }
     await app.close();
   });
@@ -31,6 +40,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/products/",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         name: "Test Product",
         description: "Test product description",
@@ -50,6 +62,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/products/",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         name: "",
         description: "",
@@ -65,6 +80,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/products/",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         name: "Dup Product",
         description: "Duplicate sku",
@@ -80,6 +98,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "GET",
       url: "/api/products/?limit=1&offset=0",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
     });
 
     expect(response.statusCode).toBe(200);
@@ -98,6 +119,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "PUT",
       url: `/api/products/${createdProductId}`,
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         name: "Updated Product",
       },
@@ -114,6 +138,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "PUT",
       url: "/api/products/nonexistent",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
       payload: {
         name: "Should Fail",
       },
@@ -130,6 +157,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "DELETE",
       url: `/api/products/${createdProductId}`,
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
     });
 
     expect(response.statusCode).toBe(200);
@@ -144,6 +174,9 @@ describeIf("products API", () => {
     const response = await app.inject({
       method: "DELETE",
       url: "/api/products/nonexistent",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
     });
 
     expect(response.statusCode).toBe(404);

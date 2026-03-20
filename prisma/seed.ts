@@ -2,6 +2,7 @@ import "dotenv/config";
 import { faker } from "@faker-js/faker";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client.js";
+import { hashPassword } from "../src/lib/password.js";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -17,6 +18,18 @@ const SEED_COUNT = Number(process.env.SEED_COUNT ?? "100");
 const BATCH_SIZE = Number(process.env.SEED_BATCH_SIZE ?? "20");
 
 async function main() {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (adminEmail && adminPassword) {
+    const passwordHash = await hashPassword(adminPassword);
+    await prisma.admin.upsert({
+      where: { email: adminEmail },
+      update: {},
+      create: { email: adminEmail, passwordHash },
+    });
+    console.log(`Seeded admin ${adminEmail}`);
+  }
+
   const products = Array.from({ length: SEED_COUNT }).map((_, index) => ({
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
