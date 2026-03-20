@@ -35,7 +35,7 @@ export async function signupController(
     role: "admin",
     sub: admin.id,
   });
-  //test pr
+
   return reply.code(201).send({
     token,
     admin: {
