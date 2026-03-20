@@ -37,10 +37,12 @@ Enterprise‑style Fastify + TypeScript backend for the 1‑week JavaScript back
 Create a `.env` file (see `.env.example` if present):
 
 Required:
+
 - `DATABASE_URL`
 - `JWT_SECRET`
 
 Optional:
+
 - `NODE_ENV`
 - `PORT`
 - `ADMIN_EMAIL` (used by seed)
@@ -75,10 +77,13 @@ npm run dev
 ```
 
 Server:
+
 - API: `http://localhost:3000`
 - Swagger UI: `http://localhost:3000/api/docs`
 
 ### Docker (DB + App)
+
+You can also run via docker with a one build command that starts up a postgresql instance, runs migration, and runs the application.
 
 ```bash
 docker compose up --build
@@ -95,18 +100,21 @@ docker-compose up --build
 ### Required (Challenge)
 
 **Customers**
+
 - `POST /api/customers`
 - `GET /api/customers?limit=50&offset=0`
 - `PUT /api/customers/:id`
 - `DELETE /api/customers/:id`
 
 **Products**
+
 - `POST /api/products`
 - `GET /api/products?limit=50&offset=0`
 - `PUT /api/products/:id`
 - `DELETE /api/products/:id`
 
 **Sales**
+
 - `POST /api/sales`
 - `GET /api/sales?month=YYYY-MM`
 
@@ -186,7 +194,6 @@ This repo follows an enterprise‑style layout:
 
 - `docs/TIMELINE.md` — progress timeline
 - `docs/LEARNING.md` — learning notes
-- `docs/SCRIPT.md` — demo walkthrough script
 
 ## Contributing
 
