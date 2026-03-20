@@ -1,6 +1,9 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 import type { LoginBody, SignupBody } from "../schemas/auth.schema.js";
-import { loginAdminService, signupAdminService } from "../services/auth.services.js";
+import {
+  loginAdminService,
+  signupAdminService,
+} from "../services/auth.services.js";
 
 export async function loginController(
   request: FastifyRequest<{ Body: LoginBody }>,
@@ -32,7 +35,7 @@ export async function signupController(
     role: "admin",
     sub: admin.id,
   });
-
+  //test pr
   return reply.code(201).send({
     token,
     admin: {
