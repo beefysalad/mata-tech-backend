@@ -7,6 +7,110 @@
   },
   "item": [
     {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "const jsonData = pm.response.json();",
+                  "pm.environment.set('authToken', jsonData.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            },
+            "description": "Create an admin account and return a JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const jsonData = pm.response.json();",
+                  "pm.environment.set('authToken', jsonData.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login as admin and return a JWT token."
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication endpoints (JWT login)."
+    },
+    {
       "name": "Health",
       "item": [
         {
@@ -223,7 +327,7 @@
                 }
               ]
             },
-            "description": "Retrieves customers with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"customers\": [/* Customer[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
+            "description": "Retrieves customers with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) \u2014 page size.\n- `offset` (number, optional, default: `0`) \u2014 number of records to skip.\n\n**Response**\n```json\n{\n  \"customers\": [/* Customer[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         },
@@ -299,7 +403,17 @@
         }
       ],
       "id": "4481fe47-d220-4248-9398-0541b3f836a0",
-      "description": "Customer management endpoints for CRUD operations."
+      "description": "Customer management endpoints for CRUD operations.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{authToken}}",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
       "name": "Products",
@@ -366,7 +480,7 @@
                 }
               ]
             },
-            "description": "Retrieves products with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"products\": [/* Product[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
+            "description": "Retrieves products with offset pagination.\n\n**Query params**\n- `limit` (number, optional, default: `50`, max: `200`) \u2014 page size.\n- `offset` (number, optional, default: `0`) \u2014 number of records to skip.\n\n**Response**\n```json\n{\n  \"products\": [/* Product[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         },
@@ -617,7 +731,17 @@
         }
       ],
       "id": "a92607da-724a-4aad-812c-e970f840431c",
-      "description": "Product management endpoints for CRUD operations."
+      "description": "Product management endpoints for CRUD operations.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{authToken}}",
+            "type": "string"
+          }
+        ]
+      }
     },
     {
       "name": "Sales",
@@ -785,13 +909,23 @@
                 }
               ]
             },
-            "description": "Retrieves sales for a given month with offset pagination.\n\n**Query params**\n- `month` (string, **required**) — month filter in `YYYY-MM` format (e.g. `2025-01`).\n- `limit` (number, optional, default: `50`, max: `200`) — page size.\n- `offset` (number, optional, default: `0`) — number of records to skip.\n\n**Response**\n```json\n{\n  \"month\": \"2025-01\",\n  \"sales\": [/* Sale[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
+            "description": "Retrieves sales for a given month with offset pagination.\n\n**Query params**\n- `month` (string, **required**) \u2014 month filter in `YYYY-MM` format (e.g. `2025-01`).\n- `limit` (number, optional, default: `50`, max: `200`) \u2014 page size.\n- `offset` (number, optional, default: `0`) \u2014 number of records to skip.\n\n**Response**\n```json\n{\n  \"month\": \"2025-01\",\n  \"sales\": [/* Sale[] */],\n  \"limit\": 50,\n  \"offset\": 0\n}\n```"
           },
           "response": []
         }
       ],
       "id": "b54a022c-1dff-4f23-af06-4d02bb74c06b",
-      "description": "Sales management endpoints for creating and managing sales."
+      "description": "Sales management endpoints for creating and managing sales.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{authToken}}",
+            "type": "string"
+          }
+        ]
+      }
     }
   ],
   "variable": [
@@ -810,6 +944,21 @@
     {
       "id": "cfcda997-8b49-40ba-955d-5e6614313179",
       "key": "productId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@example.com",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "admin123",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
       "value": "",
       "type": "string"
     }

@@ -42,6 +42,12 @@
 - Added product summary endpoint for stock + pricing aggregates.
 - Fixed create-customer flow to persist phone numbers.
 
+## 2026-03-19 (Day 6)
+
+- Added admin auth model and JWT-based login.
+- Protected API routes with JWT middleware.
+- Updated tests and frontend demo to send auth tokens.
+
 ## Planned (Next 2–3 Days)
 
 - Add authentication (optional bonus).
