@@ -9,6 +9,9 @@ import type {
   CreateSaleType,
   GetSalesByMonthQuery,
 } from "../schemas/sales.schema.js";
+type SummaryRow = Awaited<
+  ReturnType<typeof getSalesByMonthSummaryRepository>
+>[number];
 
 export const createSaleService = async (data: CreateSaleType) => {
   try {
@@ -22,9 +25,7 @@ export const createSaleService = async (data: CreateSaleType) => {
   }
 };
 
-export const getSalesByMonthService = async (
-  query: GetSalesByMonthQuery,
-) => {
+export const getSalesByMonthService = async (query: GetSalesByMonthQuery) => {
   const [yearStr, monthStr] = query.month.split("-");
   const year = Number(yearStr);
   const month = Number(monthStr);
@@ -35,108 +36,10 @@ export const getSalesByMonthService = async (
   const offset = query.offset ?? 0;
 
   const sales = await getSalesByMonthRepository(from, to, limit, offset);
-  // Summary uses the full month dataset (not paginated) for accurate totals/peaks.
+
   const summaryRows = await getSalesByMonthSummaryRepository(from, to);
-  const buildSummary = (rows: typeof summaryRows) => {
-    let totalQuantity = 0;
-    let totalRevenue = 0;
-    const customerMap = new Map<
-      string,
-      {
-        customerId: string;
-        customerName: string;
-        totalQuantity: number;
-        totalRevenue: number;
-        totalSales: number;
-      }
-    >();
-    const productMap = new Map<
-      string,
-      {
-        productId: string;
-        productName: string;
-        totalQuantity: number;
-        totalRevenue: number;
-        totalSales: number;
-      }
-    >();
-    // Track total revenue per day to compute the peak day.
-    const dayRevenueMap = new Map<string, number>();
 
-    for (const row of rows) {
-      const price = Number(
-        (row.product?.price as unknown as { toString: () => string })?.toString?.() ??
-          row.product?.price ??
-          0,
-      );
-      const revenue = row.quantity * price;
-      totalQuantity += row.quantity;
-      totalRevenue += revenue;
-
-      const dayKey = row.saleDate.toISOString().slice(0, 10);
-      dayRevenueMap.set(dayKey, (dayRevenueMap.get(dayKey) ?? 0) + revenue);
-
-      if (row.customer) {
-        const existingCustomer = customerMap.get(row.customer.id);
-        if (existingCustomer) {
-          existingCustomer.totalQuantity += row.quantity;
-          existingCustomer.totalRevenue += revenue;
-          existingCustomer.totalSales += 1;
-        } else {
-          customerMap.set(row.customer.id, {
-            customerId: row.customer.id,
-            customerName: row.customer.name,
-            totalQuantity: row.quantity,
-            totalRevenue: revenue,
-            totalSales: 1,
-          });
-        }
-      }
-
-      if (row.product) {
-        const existingProduct = productMap.get(row.product.id);
-        if (existingProduct) {
-          existingProduct.totalQuantity += row.quantity;
-          existingProduct.totalRevenue += revenue;
-          existingProduct.totalSales += 1;
-        } else {
-          productMap.set(row.product.id, {
-            productId: row.product.id,
-            productName: row.product.name,
-            totalQuantity: row.quantity,
-            totalRevenue: revenue,
-            totalSales: 1,
-          });
-        }
-      }
-    }
-
-    const customerTotals = Array.from(customerMap.values()).sort(
-      (a, b) => b.totalRevenue - a.totalRevenue,
-    );
-    const productTotals = Array.from(productMap.values()).sort(
-      (a, b) => b.totalRevenue - a.totalRevenue,
-    );
-
-    const peakEntry = Array.from(dayRevenueMap.entries()).reduce<
-      { day: string; revenue: number } | null
-    >((best, [day, revenue]) => {
-      if (!best || revenue > best.revenue) return { day, revenue };
-      return best;
-    }, null);
-
-    return {
-      totalSales: rows.length,
-      totalQuantity,
-      totalRevenue: Number(totalRevenue.toFixed(2)),
-      peakDay: peakEntry?.day ?? null,
-      peakRevenue: Number((peakEntry?.revenue ?? 0).toFixed(2)),
-      topCustomers: customerTotals.slice(0, 5),
-      topProducts: productTotals.slice(0, 5),
-    };
-  };
-
-  const currentSummary = buildSummary(summaryRows);
+  const currentSummary = _buildSummary(summaryRows);
 
   return {
     sales,
@@ -145,5 +48,108 @@ export const getSalesByMonthService = async (
     summary: {
       ...currentSummary,
     },
+  };
+};
+
+//private function
+const _buildSummary = (rows: SummaryRow[]) => {
+  let totalQuantity = 0;
+  let totalRevenue = 0;
+  const customerMap = new Map<
+    string,
+    {
+      customerId: string;
+      customerName: string;
+      totalQuantity: number;
+      totalRevenue: number;
+      totalSales: number;
+    }
+  >();
+  const productMap = new Map<
+    string,
+    {
+      productId: string;
+      productName: string;
+      totalQuantity: number;
+      totalRevenue: number;
+      totalSales: number;
+    }
+  >();
+  // Track total revenue per day to compute the peak day.
+  const dayRevenueMap = new Map<string, number>();
+
+  for (const row of rows) {
+    const price = Number(
+      (
+        row.product?.price as unknown as { toString: () => string }
+      )?.toString?.() ??
+        row.product?.price ??
+        0,
+    );
+    const revenue = row.quantity * price;
+    totalQuantity += row.quantity;
+    totalRevenue += revenue;
+
+    const dayKey = row.saleDate.toISOString().slice(0, 10);
+    dayRevenueMap.set(dayKey, (dayRevenueMap.get(dayKey) ?? 0) + revenue);
+
+    if (row.customer) {
+      const existingCustomer = customerMap.get(row.customer.id);
+      if (existingCustomer) {
+        existingCustomer.totalQuantity += row.quantity;
+        existingCustomer.totalRevenue += revenue;
+        existingCustomer.totalSales += 1;
+      } else {
+        customerMap.set(row.customer.id, {
+          customerId: row.customer.id,
+          customerName: row.customer.name,
+          totalQuantity: row.quantity,
+          totalRevenue: revenue,
+          totalSales: 1,
+        });
+      }
+    }
+
+    if (row.product) {
+      const existingProduct = productMap.get(row.product.id);
+      if (existingProduct) {
+        existingProduct.totalQuantity += row.quantity;
+        existingProduct.totalRevenue += revenue;
+        existingProduct.totalSales += 1;
+      } else {
+        productMap.set(row.product.id, {
+          productId: row.product.id,
+          productName: row.product.name,
+          totalQuantity: row.quantity,
+          totalRevenue: revenue,
+          totalSales: 1,
+        });
+      }
+    }
+  }
+
+  const customerTotals = Array.from(customerMap.values()).sort(
+    (a, b) => b.totalRevenue - a.totalRevenue,
+  );
+  const productTotals = Array.from(productMap.values()).sort(
+    (a, b) => b.totalRevenue - a.totalRevenue,
+  );
+
+  const peakEntry = Array.from(dayRevenueMap.entries()).reduce<{
+    day: string;
+    revenue: number;
+  } | null>((best, [day, revenue]) => {
+    if (!best || revenue > best.revenue) return { day, revenue };
+    return best;
+  }, null);
+
+  return {
+    totalSales: rows.length,
+    totalQuantity,
+    totalRevenue: Number(totalRevenue.toFixed(2)),
+    peakDay: peakEntry?.day ?? null,
+    peakRevenue: Number((peakEntry?.revenue ?? 0).toFixed(2)),
+    topCustomers: customerTotals.slice(0, 5),
+    topProducts: productTotals.slice(0, 5),
   };
 };
