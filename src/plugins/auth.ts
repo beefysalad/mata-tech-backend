@@ -14,6 +14,7 @@ async function authPluginImpl(app: FastifyInstance) {
   const jwtSecret = process.env.JWT_SECRET ?? "dev-secret";
   await app.register(jwt, { secret: jwtSecret });
 
+  // Global auth guard for all API routes except explicit public prefixes.
   app.addHook("onRequest", async (request, reply) => {
     if (request.method === "OPTIONS") return;
 

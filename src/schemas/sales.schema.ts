@@ -30,6 +30,7 @@ export const saleWithDetailsSchema = z.object({
     id: z.string().min(1),
     name: z.string(),
     sku: z.string(),
+    // Prisma Decimal -> number for consistent JSON output
     price: z.preprocess((value) => {
       if (typeof value === "number") return value;
       if (
@@ -47,6 +48,7 @@ const salesSummaryBaseSchema = z.object({
   totalSales: z.number().int().min(0),
   totalQuantity: z.number().int().min(0),
   totalRevenue: z.number().min(0),
+  // Derived from full-month totals (not paginated rows)
   peakDay: z.string().nullable(),
   peakRevenue: z.number().min(0),
 });
@@ -75,6 +77,7 @@ export const createSaleBodySchema = z.object({
 });
 
 export const getSalesByMonthQuerySchema = z.object({
+  // Month format required by the API (YYYY-MM)
   month: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),
   limit: z.coerce.number().int().min(1).max(200).optional(),
   offset: z.coerce.number().int().min(0).optional(),

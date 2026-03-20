@@ -77,6 +77,7 @@ export const getSalesByMonthSummaryRepository = async (
   from: Date,
   to: Date,
 ) => {
+  // Summary query intentionally fetches all sales for the month (no pagination).
   return await prisma.sale.findMany({
     where: {
       saleDate: {

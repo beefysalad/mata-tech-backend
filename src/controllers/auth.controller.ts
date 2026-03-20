@@ -7,6 +7,7 @@ export async function loginController(
   reply: FastifyReply,
 ) {
   const admin = await loginAdminService(request.body);
+  // Use `sub` for subject to satisfy @fastify/jwt typing.
   const token = request.server.jwt.sign({
     role: "admin",
     sub: admin.id,
@@ -26,6 +27,7 @@ export async function signupController(
   reply: FastifyReply,
 ) {
   const admin = await signupAdminService(request.body);
+  // Use `sub` for subject to satisfy @fastify/jwt typing.
   const token = request.server.jwt.sign({
     role: "admin",
     sub: admin.id,
